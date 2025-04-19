@@ -1,0 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+numpy
+pandas
+scikit-learn
+matplotlib
+jupyterlab
+openpyxl
+statsmodels
+torch
+torchvision
+torchaudio

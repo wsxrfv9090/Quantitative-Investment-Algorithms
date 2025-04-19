@@ -1,3 +1,7 @@
+# Usage
+1. Set absolute directory to your clone destinations.
+e.g: `d:\Important Files\Repositories\Quantitative-Investment-Algorithms'`
+
 # To do list
 
 1. CAPM algorithms
