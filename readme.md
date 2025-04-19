@@ -1,6 +1,6 @@
 # To do list
 
--[]. CAPM algorithms
+- [ ]. CAPM algorithms
 -[]. Get the data
 3. Culculate Euclidien Distance
 4. K means clustering to get labels for svm
