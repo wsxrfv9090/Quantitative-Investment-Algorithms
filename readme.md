@@ -1,7 +1,7 @@
 # To do list
 
-1. CAPM algorithms
-2. Get the data
+-[]. CAPM algorithms
+-[]. Get the data
 3. Culculate Euclidien Distance
 4. K means clustering to get labels for svm
 5. SVM using pytorch algorithm, this draws the line for binary classification
