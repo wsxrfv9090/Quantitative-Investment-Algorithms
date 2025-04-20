@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import torch
 
 # Set the working directory to a known absolute path
 default_dir = 'd:\Important Files\Repositories\Quantitative-Investment-Algorithms'
@@ -59,6 +60,13 @@ def change_numerical_data_to_float64(pd_df):
     
 def yearly_to_daily(R_f_y):
         return ((R_f_y + 1) ** (1 / 365)) - 1
+
+def euclidean_distance(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+    x = x.view(-1).to(torch.float64)
+    y = y.view(-1).to(torch.float64)
+    
+    dist = torch.norm(x - y, p=2)
+    return dist
 
 # def create_project_path(option = 'CAPM', project_name = "Default Project"):
 #     project_dir = os.path.join(global_paths[option], project_name)

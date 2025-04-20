@@ -108,7 +108,3 @@ def get_regression_line(stock_data_directory = stock_data_directory, security_fi
         'Beta':         Beta_TAG_6
     }
     return pd.DataFrame([result])
-    
-
-
-print(get_regression_line())    
