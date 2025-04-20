@@ -2,27 +2,28 @@ import os
 import pandas as pd
 
 # Set the working directory to a known absolute path
-work_dir = 'd:\Important Files\Repositories\Quantitative-Investment-Algorithms'
-os.chdir(work_dir)
+default_dir = 'd:\Important Files\Repositories\Quantitative-Investment-Algorithms'
+os.chdir(default_dir)
 
 global_paths = {
-    'CAPM': os.path.join(work_dir, 'CAPM'),
-    'K means cluster': os.path.join(work_dir, 'K means cluster'),
-    'Data': os.path.join(work_dir, 'Data'),
-    'OVO': os.path.join(work_dir, 'OVO'),
-    'SVM': os.path.join(work_dir, 'SVM'),
-    'Output': os.path.join(work_dir, 'Output')
+    'CAPM': os.path.join(default_dir, 'CAPM'),
+    'K means cluster': os.path.join(default_dir, 'K means cluster'),
+    'Data': os.path.join(default_dir, 'Data'),
+    'OVO': os.path.join(default_dir, 'OVO'),
+    'SVM': os.path.join(default_dir, 'SVM'),
+    'Output': os.path.join(default_dir, 'Output')
 }
 
 # Changes the directory to specified working directory, which is the repo directory you cloned.
-def ch_dir_to_repo(work_dir = work_dir):
+def ch_dir_to_repo(work_dir = default_dir):
     os.chdir(work_dir)
+    default_dir = work_dir
     return work_dir
 
 
 # Read files based on there sufixes.
 def read_and_return_pd_df(file_path):
-    print("The input file path is: ")
+    print("\nThe input file path is: ")
     print(file_path)
     print("Reading the input file...")
 
@@ -55,6 +56,9 @@ def change_date_to_datetime(pd_df):
 def change_numerical_data_to_float64(pd_df):
     cols = ['OPENING', 'HIGHEST', 'LOWEST', 'CLOSING', 'CHANGE', 'PCT_CHANGE', 'VOLUME', 'AMOUNT']
     pd_df[cols] = pd_df[cols].replace({',': '', '--': 'NaN'}, regex = True).astype('float64')
+    
+def yearly_to_daily(R_f_y):
+        return ((R_f_y + 1) ** (1 / 365)) - 1
 
 # def create_project_path(option = 'CAPM', project_name = "Default Project"):
 #     project_dir = os.path.join(global_paths[option], project_name)
