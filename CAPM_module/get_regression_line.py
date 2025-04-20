@@ -14,6 +14,7 @@ index_file_name = 'K线导出_000001_日线数据.xlsx'
 R_f_file_name = 'R_f.xlsx'
 
 
+
 def get_regression_line(stock_data_directory = stock_data_directory, security_file_name = chosen_security_file_name, index_file_name = index_file_name, Risk_free_file_name = R_f_file_name):
     
     # Concatenating paths.
