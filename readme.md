@@ -4,7 +4,7 @@ e.g: `d:\Important Files\Repositories\Quantitative-Investment-Algorithms'`
 
 # To do list
 
-- [ ] 1. CAPM algorithms
+- [ ] # 1. CAPM algorithms
 - [x]   1. Get the test data
 - [x]   2. Preprocess test data
 - [x]   3. Compute R_i, R_m, R_f
