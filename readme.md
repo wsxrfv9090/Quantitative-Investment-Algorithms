@@ -25,12 +25,16 @@ e.g: `d:\Important Files\Repositories\Quantitative-Investment-Algorithms'`
 - [x]   6. Repeat to find the minimum total variation
 - [x]   7. Elbow plot
 ## 4. SVM using pytorch algorithm, this draws the line for binary classification
-- [ ]    Finding best fit support vector classifier
-- [ ]      1. Shuffle the data
-- [ ]      2. Calculate signed distances, reflecting the witch side each point is on, and it's euclidean distance to the SVC
-- [ ]      3. Define hinge loss
-- [ ]      4. Minimize the hinge loss function using iterations and gradient descent
-- [ ]      5. Output it's weights and bias
+- [x]    Finding best fit support vector classifier
+- [x]      1. Shuffle the data
+- [x]      2. Calculate signed distances, reflecting the witch side each point is on, and it's euclidean distance to the SVC
+- [x]      3. Define hinge loss
+- [x]      4. Minimize the hinge loss function using iterations and gradient descent
+- [x]      5. Output it's weights and bias
+- [ ]    Improvments to be made:
+- [ ]      1. Change datatype as a deployable parameter
+- [ ]      2. Pack functions better
+- [ ]      3. Design a batch option
 ##  5. OVO using pytorch algorithm, do one by one voting system, this uses the SVM function for each 2 clusters clustered by the k means cluster
 - [ ]    OVO classification (multiclass classification) implementation
 - [ ]      1. Add k means cluster output as datas labels

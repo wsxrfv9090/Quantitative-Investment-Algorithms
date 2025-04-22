@@ -65,12 +65,12 @@ if __name__ == "__main__":
     X, y = load_data(data_path)
 
     # feature‐scale!
-    scaler = StandardScaler()
-    X = scaler.fit_transform(X)
+    # scaler = StandardScaler()
+    # X = scaler.fit_transform(X)
 
     w, b = train_svm(
         X, y,
-        epochs=300,
+        epochs=10000,
         learning_rate=1e-3,
         C=1.0,
         batch_size=64,    # now you’ll see ALL 699 samples per epoch

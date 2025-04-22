@@ -123,7 +123,7 @@ def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE
             best_centroids = Centroids.clone()
             best_labels = Labels.clone()
 
-    return best_centroids, best_labels, best_variation
+    return X, best_labels, best_centroids, best_variation
 
 
 
@@ -134,7 +134,7 @@ def k_means_assessment(X = X_gpu, k = 10):
     variations = []
 
     for k in ks:
-        _, _, var = WCSS_for_single_k(X, k)
+        _, _, _, var = WCSS_for_single_k(X, k)
         variations.append(var)
     
     if not variations:
@@ -151,3 +151,5 @@ def k_means_assessment(X = X_gpu, k = 10):
     plt.grid(True, linestyle="--", alpha=0.5)
     plt.show()
     return variations
+
+k_means_assessment()

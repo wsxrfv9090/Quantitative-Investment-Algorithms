@@ -23,32 +23,26 @@ df.drop(['id'], axis = 1, inplace = True)
 df["bare_nuclei"] = df["bare_nuclei"].astype(np.int64)
 df.dropna(inplace = True)
 
-X = np.array(df.drop(['class'], axis = 1)).astype('float64')
-y = np.array(df['class']).astype('float64')
+X = np.array(df.drop(['class'], axis = 1)).astype('float32')
+y = np.array(df['class']).astype('float32')
 
 y = np.where(y == 4, 1, np.where(y == 2, -1, y))
 
-X_example = torch.tensor(X, dtype = torch.float32, device = device, requires_grad = True)
-y_example = torch.tensor(y, dtype = torch.float32, device = device, requires_grad = True)
+X_gpu = torch.tensor(X, dtype = torch.float32, device = device, requires_grad = True)
+y_gpu = torch.tensor(y, dtype = torch.float32, device = device, requires_grad = True)
 
 
-n, d = X_example.shape
+# n, d = X_example.shape
 
-def init_params(n_features, device):
-    w = torch.zeros(n_features, dtype=torch.float32, device=device, requires_grad=True)
-    b = torch.zeros(1, dtype=torch.float32, device=device, requires_grad=True)
-    return w, b
+# def init_params(n_features, device):
+#     w = torch.zeros(n_features, dtype=torch.float32, device=device, requires_grad=True)
+#     b = torch.zeros(1, dtype=torch.float32, device=device, requires_grad=True)
+#     return w, b
 
-w, b = init_params(d, device)
-
-
-optimizer = torch.optim.SGD([w, b], lr=LEARNING_RATE)
+# w, b = init_params(d, device)
 
 
-
-
-
-
+# optimizer = torch.optim.SGD([w, b], lr=LEARNING_RATE)
 
 
 
@@ -60,7 +54,7 @@ def shuffle_tensor_row_wise(ts = X_gpu):
 shuffle_tensor_row_wise(X_gpu)
 
 def create_random_weights_bias(shape = X_gpu.shape[-1] + 1):
-    weights_bias = torch.rand(1, shape, dtype = torch.float64, device = device)
+    weights_bias = torch.rand(1, shape, dtype = torch.float32, device = device)
     weights_bias = torch.squeeze(weights_bias)
     weights_bias[-1] = 0
     return weights_bias
@@ -86,7 +80,6 @@ def hinge_loss(distances = distances, labels = y_gpu, margin=1.0):
 loss = hinge_loss(distances, y_gpu)
 
 def update_model(X = X_gpu, y = y_gpu, weights = weights_bias[:-1], bias = weights_bias[-1], learning_rate = 0.01):
-    
     weights.requires_grad_(True)
     bias.requires_grad_(True)
     
@@ -105,9 +98,15 @@ def update_model(X = X_gpu, y = y_gpu, weights = weights_bias[:-1], bias = weigh
     
     return loss.item(), weights, bias
 
-num_epochs = 100
-learning_rate = 0.01
 
-for epoch in range(num_epochs):
-    loss_value, weights, bias = update_model(X_gpu, y_gpu)
-    print(f"Epoch {epoch + 1:03d} | Loss: {loss_value:.4f}")
+def test(X = X_gpu, y = y_gpu, num_epochs = 10000, learning_rate = 0.01):
+    print(f"shape of X: {X.shape}")
+    print(f"shape of y: {y.shape}")
+    loss_value, weights, bias = update_model(X, y)
+    for epoch in range(num_epochs):
+        loss_value, weights, bias = update_model(X, y)
+        print(f"Epoch {epoch + 1:03d} | Loss: {loss_value:.4f}")
+        
+    return weights, bias
+
+# test()
