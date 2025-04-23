@@ -18,10 +18,10 @@ df.drop(['id'], axis = 1, inplace = True)
 df["bare_nuclei"] = df["bare_nuclei"].astype(np.int64)
 df.dropna(inplace = True)
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = gr.set_device()
 print(f"Current device: {device.capitalize()}.")
 
-X = np.array(df.drop(['class'], axis = 1)).astype('float64')
+X = np.array(df.drop(['class'], axis = 1)).astype('float32')
 X_gpu = torch.tensor(X, device = device)
 
 # Important Parameters
@@ -29,9 +29,12 @@ RANDOM_SEED = random.randint(0, 2**32 - 1)
 MAX_ITERATION = int(1e3)
 TOLERANCE = 1e-6
 N_RESTARTS = int(10)
+DTYPE = torch.float32
 
 # Initiates k centroids for X tensor
 def initiate_centroids(X = X_gpu, k = 3, random_seed = RANDOM_SEED):
+    # size(0) meaning the total column number of X
+    print(f"Initiating centroids with k being {k}...")
     N = X.size(0)
     # GPU ways of doing it, but it randomly permute all data before sampling, and isn't the best practice:
     # generator = torch.Generator(device=X_gpu.device).manual_seed(RANDOM_SEED)
@@ -40,7 +43,7 @@ def initiate_centroids(X = X_gpu, k = 3, random_seed = RANDOM_SEED):
     # draw k unique ints in [0..N-1]
     idx_cpu = random.sample(range(N), k)    
     # convert & move to GPU
-    idx = torch.tensor(idx_cpu, device=X_gpu.device)
+    idx = torch.tensor(idx_cpu, device = X_gpu.device, dtype = torch.int)
     centroids = X[idx]
     return centroids
 
@@ -48,20 +51,20 @@ def initiate_centroids(X = X_gpu, k = 3, random_seed = RANDOM_SEED):
 # Centroids = init_centroids(X_gpu)
 
 # This function uses max_iters to optimize centroids base on the difference between new and old centroids, with tol being the tolerance, returns the optimized centroids and the corresponding labels
-def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, tol = TOLERANCE):
+def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, tol = TOLERANCE, dtype = DTYPE):
     labels = 0
     global RANDOM_SEED
     if centroids == None:
         centroids = initiate_centroids(X)
     for it in range(max_iters):
         labels = torch.cdist(X_gpu, centroids).argmin(dim = 1)
-        new_centroids = torch.zeros_like(centroids)
+        new_centroids = torch.zeros_like(centroids, device = X.device, dtype = dtype)
         
         for j in range(centroids.size(0)):
             members = X_gpu[labels == j]
             if members.numel() == 0:
                 RANDOM_SEED += 1
-                centroids = initiate_centroids(X, k=centroids.size(0), random_seed = RANDOM_SEED)
+                centroids = initiate_centroids(X, k = centroids.size(0), random_seed = RANDOM_SEED)
             else:
                 new_centroids[j] = members.mean(dim = 0)
 
@@ -82,10 +85,10 @@ def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, t
 # Centroids, Labels = optimize_centroids(Centroids)
 
 # Calculates the variation for a given tensor X, it's centroids and it's corresponding labels
-def calculate_variation(X = X_gpu, centroids = None, labels = None):
+def calculate_variation(X = X_gpu, centroids = None, labels = None, dtype = DTYPE):
     variation = 0.0
     if centroids == None or labels == None:
-        centroids, labels = optimize_centroids(X)
+        centroids, labels = optimize_centroids(X, dtype = dtype)
     for j in range(centroids.size(0)):
         members = X_gpu[labels == j]
         diffs = members - centroids[j].unsqueeze(0)
@@ -98,12 +101,13 @@ def calculate_variation(X = X_gpu, centroids = None, labels = None):
 
 # Within cluster sum of squares
 # This function calculates the sum of squares within clusters for each restarts, and choose the best one, and it does that by accessing the variation for each restarts, note that this n_restarts is the way you adjust your parameters, when N_RESTARTS is too low, it probably won't get the "best" variation, but when N_RESTARTS is too high, it'll take forever but increase the reliability.
-def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE, max_iters = MAX_ITERATION):
+def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE, max_iters = MAX_ITERATION, dtype = DTYPE):
     global RANDOM_SEED
     best_variation = float('inf')
     best_centroids = None
     best_labels = None
 
+    print(f"Clustering with: k = {k}, dtype = {X.dtype if X.dtype == dtype else f'Miss match in parameters during WCSS_for_single_k function!!! With X.dtype = {X.dtype}, set parameter dtype = {dtype}.'}")
     for _ in range(n_restarts):
         RANDOM_SEED += 1
         Centroids = initiate_centroids(X, k, random_seed = RANDOM_SEED)
@@ -112,10 +116,11 @@ def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE
             X = X,
             centroids = Centroids,
             max_iters = max_iters,
-            tol = tol
+            tol = tol,
+            dtype = dtype
         )
 
-        var = calculate_variation(X, Centroids, Labels)
+        var = calculate_variation(X, Centroids, Labels, dtype = dtype)
 
         # keep best
         if var < best_variation:
@@ -138,7 +143,7 @@ def k_means_assessment(X = X_gpu, k = 10):
         variations.append(var)
     
     if not variations:
-        print("No valid results to plot.")
+        print("No valid results to plot in k_means_accessment.")
         return
     
     plt.figure(figsize=(8, 5))
@@ -152,4 +157,4 @@ def k_means_assessment(X = X_gpu, k = 10):
     plt.show()
     return variations
 
-k_means_assessment()
+# k_means_assessment()

@@ -15,6 +15,9 @@ global_paths = {
     'Output': os.path.join(default_dir, 'Output')
 }
 
+def set_device():
+    return 'cuda' if torch.cuda.is_available() else 'cpu'
+
 # Changes the directory to specified working directory, which is the repo directory you cloned.
 def ch_dir_to_repo(work_dir = default_dir):
     os.chdir(work_dir)
