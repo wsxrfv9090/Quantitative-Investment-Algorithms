@@ -3,7 +3,7 @@ import pandas as pd
 import torch
 
 # Set the working directory to a known absolute path
-default_dir = 'd:\Important Files\Repositories\Quantitative-Investment-Algorithms'
+default_dir = 'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
 os.chdir(default_dir)
 
 global_paths = {

@@ -84,9 +84,7 @@ def update_model(X = X_gpu, y = y_gpu, weights = weights_bias[:-1], bias = weigh
     bias.requires_grad_(True)
     
     distances = cal_signed_distance(X, weights, bias)
-    
     loss = hinge_loss(distances, y)
-    
     loss.backward()
     
     with torch.no_grad():
@@ -100,13 +98,17 @@ def update_model(X = X_gpu, y = y_gpu, weights = weights_bias[:-1], bias = weigh
 
 
 def test(X = X_gpu, y = y_gpu, num_epochs = 10000, learning_rate = 0.01):
-    print(f"shape of X: {X.shape}")
-    print(f"shape of y: {y.shape}")
-    loss_value, weights, bias = update_model(X, y)
-    for epoch in range(num_epochs):
-        loss_value, weights, bias = update_model(X, y)
-        print(f"Epoch {epoch + 1:03d} | Loss: {loss_value:.4f}")
-        
+    weights_bias = create_random_weights_bias(shape = X.shape[1] + 1)
+    weights = weights_bias[:-1]
+    bias    = weights_bias[-1]
+    
+    for epoch in range(1, num_epochs+1):
+        loss_value, weights, bias = update_model(
+            X, y, weights, bias, learning_rate
+        )
+        if epoch % 100 == 0:
+            print(f"Epoch {epoch:04d} | Loss: {loss_value:.6f}")
     return weights, bias
+        
 
-# test()
+test()
