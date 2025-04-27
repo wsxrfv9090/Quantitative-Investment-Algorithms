@@ -21,7 +21,9 @@ def set_device():
 # Changes the directory to specified working directory, which is the repo directory you cloned.
 def ch_dir_to_repo(work_dir = default_dir):
     os.chdir(work_dir)
-    default_dir = work_dir
+    global default_dir
+    if work_dir != default_dir:
+        default_dir = work_dir
     return work_dir
 
 
@@ -71,20 +73,3 @@ def euclidean_distance(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
     dist = torch.norm(x - y, p=2)
     return dist
 
-# def create_project_path(option = 'CAPM', project_name = "Default Project"):
-#     project_dir = os.path.join(global_paths[option], project_name)
-#     os.makedirs(project_dir, exist_ok = True)
-#     print(f"Project directory created under '{project_dir}'")
-        
-#     data_dir = os.path.join(project_dir, 'Data')
-#     os.makedirs(data_dir, exist_ok = True)
-#     print(f"Project data directory created under '{data_dir}'")
-        
-#     output_dir = os.path.join(project_dir, 'Output')
-#     os.makedirs(output_dir, exist_ok = True)
-#     print(f"Project output directory created under '{output_dir}'")
-#     return {
-#         'project_path': project_dir,
-#         'data_dir': data_dir,
-#         'output_dir': output_dir,
-#     }

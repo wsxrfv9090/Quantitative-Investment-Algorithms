@@ -17,6 +17,7 @@ def nl():
     # Elbow accessing:
 # kmc.k_means_assessment()
 
+
 # Choose K according to the plot
 k = 2
 X, y, centroids, var = kmc.WCSS_for_single_k(k = k)
