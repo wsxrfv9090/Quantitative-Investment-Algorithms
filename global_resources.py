@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import torch
+import numpy as np
 
 # Set the working directory to a known absolute path
 default_dir = 'd:\Important Files\Repositories\Quantitative-Investment-Algorithms'
@@ -29,9 +30,7 @@ def ch_dir_to_repo(work_dir = default_dir):
 
 # Read files based on there sufixes.
 def read_and_return_pd_df(file_path):
-    print("\nThe input file path is: ")
-    print(file_path)
-    print("Reading the input file...")
+    print(f"Reading files from: {file_path}")
 
     # Check if the file is csv or excel
     if file_path.endswith('.csv'):
@@ -52,7 +51,7 @@ def change_head_to_ENG(pd_df):
     
 # Change the data type of the security code to string
 def change_secu_code_to_str(pd_df):
-    pd_df['SECU_CODE'] = pd_df['SECU_CODE'].astype('U6')
+    pd_df['SECU_CODE'] = pd_df['SECU_CODE'].astype('str')
 
 # Change the data type of the date to datetime
 def change_date_to_datetime(pd_df):
@@ -73,3 +72,22 @@ def euclidean_distance(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
     dist = torch.norm(x - y, p=2)
     return dist
 
+def display_nan_for(df = None):
+    na_rows = df[df.isna().any(axis=1)]
+    print(na_rows)
+    return na_rows
+
+
+# This function can only be used 
+def get_df_dict(data_dir = None):
+    if data_dir == None:
+        print('No data_dir parameter passed, please put data directory into the parameters.')
+        return None
+    dfs = {}
+
+    for fname in os.listdir(data_dir):
+        full_path = os.path.join(data_dir, fname)
+        temp_df = read_and_return_pd_df(full_path)
+        key = temp_df.iat[1, 0]
+        dfs[key] = temp_df
+    return dfs
