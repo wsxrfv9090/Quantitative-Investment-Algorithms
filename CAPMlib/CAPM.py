@@ -12,13 +12,14 @@ work_dir = gr.ch_dir_to_repo()
 data_dir = os.path.join(work_dir, 'Data', 'Stock Data')
 # data_dir = os.path.join(work_dir, 'Data', 'TEST Stock Data for CAPM', 'Stocks')
 index_dir = os.path.join(data_dir, '000001_daily_hfq.csv')
+R_f_path = os.path.join(work_dir, 'Data', 'TEST Stock Data for CAPM', 'R_f_0.xlsx')
 
 dfs = gr.get_df_dict(data_dir = data_dir)
 
 # Data preprocess
 
 # Iterating
-R_f_path = os.path.join(work_dir, 'Data', 'TEST Stock Data for CAPM', 'R_f.xlsx')
+
 
 def CAPM(index_file_or_key = '000001', processed_dfs_dict = dfs, R_f_path = R_f_path):
     """
@@ -146,7 +147,7 @@ def plot_random_capm(capm_df, n_stocks = 5, x_range = None, n_points = 100):
         sid   = row['Stock ID']
 
         y = alpha + beta * x
-        ax.plot(x, y, label=str(sid))
+        ax.plot(x, y, label = str(sid))
 
     # Add zero reference lines
     ax.axhline(0, color='gray', linestyle='--', linewidth=0.8)

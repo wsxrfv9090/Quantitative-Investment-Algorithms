@@ -110,6 +110,8 @@ ENDDATE = '2025-01-02'
     
 
 def get_df_dict(start_date = STARTDATE, end_date = ENDDATE, data_dir = None):
+    print(start_date)
+    print(end_date)
     if data_dir == None:
         print('No data_dir parameter passed, please put data directory into the parameters.')
         return None
@@ -133,6 +135,10 @@ def get_df_dict(start_date = STARTDATE, end_date = ENDDATE, data_dir = None):
         else:
             skip_count += 1
             # skip this file if it doesn't cover the full date range
+            continue
+        if (temp_df['收盘'] < 0).any():
+            skip_count += 1
+            # skip this file if it contains negative 收盘价
             continue
         # Convert to string with zero padding
         temp_df['股票代码'] = temp_df['股票代码'].astype(str).str.zfill(6)
