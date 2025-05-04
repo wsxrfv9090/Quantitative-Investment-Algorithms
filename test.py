@@ -4,7 +4,7 @@ import SVM.SVC as svc
 import CAPM_module.get_regression_line as capm
 import torch
 
-main_dir = 'D:\Important Files\Repositories\Quantitative-Investment-Algorithms'
+main_dir = 'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
 gr.ch_dir_to_repo(main_dir)
 
 def nl():
