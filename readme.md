@@ -32,8 +32,8 @@ e.g: `d:\Important Files\Repositories\Quantitative-Investment-Algorithms'`
 - [x]      4. Minimize the hinge loss function using iterations and gradient descent
 - [x]      5. Output it's weights and bias
 - [ ]    Improvments to be made:
-- [ ]      1. Change datatype as a deployable parameter
-- [ ]      2. Pack functions better
+- [x]      1. Change datatype as a deployable parameter
+- [x]      2. Pack functions better
 - [ ]      3. Design a batch option
 ##  5. OVO using pytorch algorithm, do one by one voting system, this uses the SVM function for each 2 clusters clustered by the k means cluster
 - [ ]    OVO classification (multiclass classification) implementation

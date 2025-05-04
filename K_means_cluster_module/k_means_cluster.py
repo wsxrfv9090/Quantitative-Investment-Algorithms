@@ -43,7 +43,7 @@ def initiate_centroids(X = X_gpu, k = 3, random_seed = RANDOM_SEED):
     # draw k unique ints in [0..N-1]
     idx_cpu = random.sample(range(N), k)    
     # convert & move to GPU
-    idx = torch.tensor(idx_cpu, device = X_gpu.device, dtype = torch.int)
+    idx = torch.tensor(idx_cpu, device = X.device, dtype = torch.int)
     centroids = X[idx]
     return centroids
 
@@ -57,11 +57,11 @@ def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, t
     if centroids == None:
         centroids = initiate_centroids(X)
     for it in range(max_iters):
-        labels = torch.cdist(X_gpu, centroids).argmin(dim = 1)
+        labels = torch.cdist(X, centroids).argmin(dim = 1)
         new_centroids = torch.zeros_like(centroids, device = X.device, dtype = dtype)
         
         for j in range(centroids.size(0)):
-            members = X_gpu[labels == j]
+            members = X[labels == j]
             if members.numel() == 0:
                 RANDOM_SEED += 1
                 centroids = initiate_centroids(X, k = centroids.size(0), random_seed = RANDOM_SEED)
@@ -71,7 +71,7 @@ def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, t
         # If the new_centroids and old centroids are not more different than tol, it will break the loop
         if torch.allclose(new_centroids, centroids, atol = tol):
             # print(f"Converged at iter {it}")
-            labels = torch.cdist(X_gpu, new_centroids).argmin(dim = 1)
+            labels = torch.cdist(X, new_centroids).argmin(dim = 1)
             break
         if it == max_iters:
             print(f"Hit max_iters in optimize_centroids function!!!!")
@@ -90,7 +90,7 @@ def calculate_variation(X = X_gpu, centroids = None, labels = None, dtype = DTYP
     if centroids == None or labels == None:
         centroids, labels = optimize_centroids(X, dtype = dtype)
     for j in range(centroids.size(0)):
-        members = X_gpu[labels == j]
+        members = X[labels == j]
         diffs = members - centroids[j].unsqueeze(0)
         variation += torch.sum(diffs * diffs).item()
     return variation
@@ -110,22 +110,22 @@ def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE
     print(f"Clustering with: k = {k}, dtype = {X.dtype if X.dtype == dtype else f'Miss match in parameters during WCSS_for_single_k function!!! With X.dtype = {X.dtype}, set parameter dtype = {dtype}.'}")
     for _ in range(n_restarts):
         RANDOM_SEED += 1
-        Centroids = initiate_centroids(X, k, random_seed = RANDOM_SEED)
+        centroids = initiate_centroids(X, k, random_seed = RANDOM_SEED)
         
-        Centroids, Labels = optimize_centroids(
+        centroids, Labels = optimize_centroids(
             X = X,
-            centroids = Centroids,
+            centroids = centroids,
             max_iters = max_iters,
             tol = tol,
             dtype = dtype
         )
 
-        var = calculate_variation(X, Centroids, Labels, dtype = dtype)
+        var = calculate_variation(X, centroids, Labels, dtype = dtype)
 
         # keep best
         if var < best_variation:
             best_variation = var
-            best_centroids = Centroids.clone()
+            best_centroids = centroids.clone()
             best_labels = Labels.clone()
 
     return X, best_labels, best_centroids, best_variation
