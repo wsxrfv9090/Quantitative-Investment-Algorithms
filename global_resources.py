@@ -4,7 +4,7 @@ import torch
 import numpy as np
 
 # Set the working directory to a known absolute path
-default_dir = 'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
+default_dir = r'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
 os.chdir(default_dir)
 
 global_paths = {

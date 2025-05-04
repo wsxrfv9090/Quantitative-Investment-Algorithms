@@ -124,16 +124,18 @@ def train(X = X_gpu,
     streak = 0
     for epoch in range(num_epochs):
         loss_value, weights, bias = update_model(X, y, weights = weights, bias = bias, learning_rate = lr, dtype = DTYPE, l2_penalty = l2_penalty)
-        delta_loss = prev_loss - loss_value if prev_loss is not None else 0.0
+        delta_loss = prev_loss - loss_value if prev_loss is not None else None
         lr = adjust_lr(delta_loss, lr)
         prev_loss = loss_value
-
-        if delta_loss ** 2 <= delta_loss_breaker and delta_loss != 0:
-            if (delta_loss != 0.0) and (delta_loss**2 <= delta_loss_breaker):
-                streak += 1
-            else:
-                streak = 0
-        if epoch == 1 or epoch % print_every == 0 or epoch == num_epochs or streak >= patience:
+        
+        small = None
+        if delta_loss:
+            small = abs(delta_loss) <= delta_loss_breaker and delta_loss != 0 and delta_loss != None
+        if small:
+            streak += 1
+        else:
+            streak = 0
+        if epoch == 1 or epoch % print_every == 0 or epoch == num_epochs or streak >= patience or epoch == num_epochs - 1:
             print(f"Epoch {epoch} | Loss: {loss_value:} | Delta loss: {delta_loss}")  
         if streak >= patience:
             print(f"Exited with delta_Loss squared consecutively being smaller than {delta_loss_breaker} from epoch {epoch - 10} to epoch {epoch}.")
@@ -149,6 +151,8 @@ def adjust_lr(delta_loss,
               min_lr: float = 1e-6,
               max_lr: float = 1.0,
               thresh: float = 1e-4):
+    if delta_loss == None:
+        return lr
     
     if delta_loss >= thresh:
         # good improvement → bump lr

@@ -6,22 +6,25 @@ import random
 import matplotlib.pyplot as plt
 
 # Example Data process
-# Read data
+# Read data as pandas dataframe
 data_path = os.path.join(gr.default_dir, r'Data\breast-cancer-wisconsin.data')
 df = gr.read_and_return_pd_df(data_path)
 
-
+# Process & drop Nan(not a number) values
 df.replace('?', np.nan, inplace = True)
 df.dropna(inplace = True)
-# df.replace('?', -99999, inplace = True)
+
+# Drop useless data column
 df.drop(['id'], axis = 1, inplace = True)
 df["bare_nuclei"] = df["bare_nuclei"].astype(np.int64)
-df.dropna(inplace = True)
 
+# Set device
 device = gr.set_device()
 print(f"Current device: {device.capitalize()}.")
 
+# Set X as datatype: np.array()
 X = np.array(df.drop(['class'], axis = 1)).astype('float32')
+# Set X_gpu as datatype: torch.tensor()
 X_gpu = torch.tensor(X, device = device)
 
 # Important Parameters
@@ -32,39 +35,52 @@ N_RESTARTS = int(10)
 DTYPE = torch.float32
 
 # Initiates k centroids for X tensor
-def initiate_centroids(X = X_gpu, k = 3, random_seed = RANDOM_SEED):
-    # size(0) meaning the total column number of X
+def initiate_centroids(X, k = 3, random_seed = RANDOM_SEED):
+    # size(0) meaning the total row number of X
     print(f"Initiating centroids with k being {k}...")
     N = X.size(0)
+    
     # GPU ways of doing it, but it randomly permute all data before sampling, and isn't the best practice:
     # generator = torch.Generator(device=X_gpu.device).manual_seed(RANDOM_SEED)
     # idx = torch.randperm(X_gpu.size(0), generator = generator, device = X_gpu.device)[:k]
     random.seed(random_seed)
     # draw k unique ints in [0..N-1]
-    idx_cpu = random.sample(range(N), k)    
+    idx_cpu = random.sample(range(N), k)
+    
     # convert & move to GPU
     idx = torch.tensor(idx_cpu, device = X.device, dtype = torch.int)
     centroids = X[idx]
     return centroids
 
-# Usage for init_centroids
-# Centroids = init_centroids(X_gpu)
 
 # This function uses max_iters to optimize centroids base on the difference between new and old centroids, with tol being the tolerance, returns the optimized centroids and the corresponding labels
-def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, tol = TOLERANCE, dtype = DTYPE):
+def optimize_centroids(X, k = 3, centroids = None, max_iters = MAX_ITERATION, tol = TOLERANCE):
     labels = 0
     global RANDOM_SEED
+    
+    # If centroids is none, initiate them
     if centroids == None:
-        centroids = initiate_centroids(X)
+        centroids = initiate_centroids(X, k)
+    
+    # If dtype of x and centroids doesn't match, return None
+    if X.dtype != centroids.dtype:
+        print(f"Mismatch in data types for X and centroids in function optimize_centroids, with dtype of X being: {X.dtype}, dtype of centroids being: {centroids.dtype}.")
+        return None
+    
+    # If the rows number of centroids doesn't match with k, raise error
+    if centroids.size(0) != k:
+        print(f"Total row number of centroids is not equal to k passed in.")
+        return None
+    
     for it in range(max_iters):
         labels = torch.cdist(X, centroids).argmin(dim = 1)
-        new_centroids = torch.zeros_like(centroids, device = X.device, dtype = dtype)
+        new_centroids = torch.zeros_like(centroids, device = X.device, dtype = centroids.dtype)
         
         for j in range(centroids.size(0)):
             members = X[labels == j]
             if members.numel() == 0:
                 RANDOM_SEED += 1
-                centroids = initiate_centroids(X, k = centroids.size(0), random_seed = RANDOM_SEED)
+                centroids = initiate_centroids(X, k = k, random_seed = RANDOM_SEED)
             else:
                 new_centroids[j] = members.mean(dim = 0)
 
@@ -80,15 +96,15 @@ def optimize_centroids(X = X_gpu, centroids = None, max_iters = MAX_ITERATION, t
     return new_centroids, labels
 
 
-
 # Usage for optimize_centroids
 # Centroids, Labels = optimize_centroids(Centroids)
 
 # Calculates the variation for a given tensor X, it's centroids and it's corresponding labels
-def calculate_variation(X = X_gpu, centroids = None, labels = None, dtype = DTYPE):
+def calculate_variation(X, centroids = None, labels = None):
     variation = 0.0
     if centroids == None or labels == None:
-        centroids, labels = optimize_centroids(X, dtype = dtype)
+        print(f"Centroids or labels was not passed in to function: calculate_variation.")
+        return None
     for j in range(centroids.size(0)):
         members = X[labels == j]
         diffs = members - centroids[j].unsqueeze(0)
@@ -101,32 +117,42 @@ def calculate_variation(X = X_gpu, centroids = None, labels = None, dtype = DTYP
 
 # Within cluster sum of squares
 # This function calculates the sum of squares within clusters for each restarts, and choose the best one, and it does that by accessing the variation for each restarts, note that this n_restarts is the way you adjust your parameters, when N_RESTARTS is too low, it probably won't get the "best" variation, but when N_RESTARTS is too high, it'll take forever but increase the reliability.
-def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE, max_iters = MAX_ITERATION, dtype = DTYPE):
+def WCSS_for_single_k(X = X_gpu, k = 3, n_restarts = N_RESTARTS, tol = TOLERANCE, max_iters = MAX_ITERATION):
     global RANDOM_SEED
     best_variation = float('inf')
     best_centroids = None
     best_labels = None
 
-    print(f"Clustering with: k = {k}, dtype = {X.dtype if X.dtype == dtype else f'Miss match in parameters during WCSS_for_single_k function!!! With X.dtype = {X.dtype}, set parameter dtype = {dtype}.'}")
+    print(f"Clustering with: k = {k}.")
+    old_centroids = torch.zeros(k, X.shape[1], device = X.device, dtype = X.dtype)
     for _ in range(n_restarts):
         RANDOM_SEED += 1
         centroids = initiate_centroids(X, k, random_seed = RANDOM_SEED)
-        
         centroids, Labels = optimize_centroids(
             X = X,
+            k = k,
             centroids = centroids,
             max_iters = max_iters,
-            tol = tol,
-            dtype = dtype
+            tol = tol
         )
 
-        var = calculate_variation(X, centroids, Labels, dtype = dtype)
+        var = calculate_variation(X, centroids, Labels)
 
         # keep best
         if var < best_variation:
             best_variation = var
             best_centroids = centroids.clone()
             best_labels = Labels.clone()
+        if torch.allclose(old_centroids, centroids, atol = tol):
+            best_variation = var
+            best_centroids = centroids.clone()
+            best_labels = Labels.clone()
+            break
+            
+        old_centroids = centroids.clone()
+        zeros = torch.zeros_like(centroids, device=X.device, dtype=X.dtype)
+        if torch.equal(old_centroids, zeros):
+            print("Error: old_centroids are zeros like without being modified by actual old centroids.")
 
     return X, best_labels, best_centroids, best_variation
 

@@ -2,7 +2,9 @@ import global_resources as gr
 import K_means_cluster_module.k_means_cluster as kmc
 import SVM.SVC as svc
 import torch
-import CAPMlib.CAPM as capm
+import os
+import numpy as np
+# import CAPMlib.CAPM as capm
 
 main_dir = 'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
 gr.ch_dir_to_repo(main_dir)
@@ -11,11 +13,35 @@ def nl():
     print("\n")
 
 # Import data
+data_path = os.path.join(gr.default_dir, r'Data\breast-cancer-wisconsin.data')
+df = gr.read_and_return_pd_df(data_path)
+
+# Process & drop Nan(not a number) values
+df.replace('?', np.nan, inplace = True)
+df.dropna(inplace = True)
+
+# Drop useless data column
+df.drop(['id'], axis = 1, inplace = True)
+df["bare_nuclei"] = df["bare_nuclei"].astype(np.int64)
+
+# Set device
+device = gr.set_device()
+print(f"Current device: {device.capitalize()}.")
+
+# Set X as datatype: np.array()
+X = np.array(df.drop(['class'], axis = 1)).astype('float32')
+# Set X_gpu as datatype: torch.tensor()
+X_gpu = torch.tensor(X, device = device)
+
+
+
+
+
 
 # K means cluster
 
     # Elbow accessing:
-# kmc.k_means_assessment()
+kmc.k_means_assessment()
 
 
 # Choose K according to the plot
@@ -35,4 +61,4 @@ svc_trained_weights, svc_trained_bias = svc.train(X, y, weights = weights_bias[:
 accuracy = svc.score(svc_trained_weights, svc_trained_bias, X, y)
 print(f"Testing Completed with the accuracy of {accuracy}. ")
 
-test = capm.CAPM()
+# test = capm.CAPM()
