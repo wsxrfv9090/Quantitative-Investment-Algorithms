@@ -2,22 +2,39 @@ import os
 import pandas as pd
 import torch
 import numpy as np
+import torch
+import random
+
 
 # Set the working directory to a known absolute path
-default_dir = r'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
+default_dir = r'D:\Important Files\Repositories\Quantitative-Investment-Algorithms'
 os.chdir(default_dir)
 
 global_paths = {
-    'CAPM': os.path.join(default_dir, 'CAPM'),
-    'K means cluster': os.path.join(default_dir, 'K means cluster'),
+    'CAPM': os.path.join(default_dir, 'CAPMlib'),
+    'K means cluster': os.path.join(default_dir, 'kmc_torch'),
     'Data': os.path.join(default_dir, 'Data'),
-    'OVO': os.path.join(default_dir, 'OVO'),
     'SVM': os.path.join(default_dir, 'SVM'),
     'Output': os.path.join(default_dir, 'Output')
 }
 
+
+# has to be a interger with range: [0, 2**32)
+RANDOM_SEED = random.getrandbits(32)
+MAX_ITERATION = int(1e3)
+TOLERANCE = 1e-6
+N_RESTARTS = int(10)
+DTYPE = torch.float32
+
+
 def set_device():
     return 'cuda' if torch.cuda.is_available() else 'cpu'
+
+def reinitiate_seed_torch() -> int:
+    global RANDOM_SEED
+    RANDOM_SEED = random.getrandbits(32)
+    return RANDOM_SEED
+
 
 # Changes the directory to specified working directory, which is the repo directory you cloned.
 def ch_dir_to_repo(work_dir = default_dir):

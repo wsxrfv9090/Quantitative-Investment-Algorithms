@@ -13,144 +13,166 @@ DELTA_LOSS_BREAKER = 1e-12
 device = gr.set_device()
 print(f"Current training device: {device.capitalize()}.")
 
-# Example Data process
-# Read data
-data_path = os.path.join(gr.default_dir, r'Data\breast-cancer-wisconsin.data')
-df = gr.read_and_return_pd_df(data_path)
-
-df.replace('?', np.nan, inplace = True)
-df.dropna(inplace = True)
-# df.replace('?', -99999, inplace = True)
-df.drop(['id'], axis = 1, inplace = True)
-df["bare_nuclei"] = df["bare_nuclei"].astype(np.int64)
-df.dropna(inplace = True)
-
-X = np.array(df.drop(['class'], axis = 1)).astype('float32')
-y = np.array(df['class']).astype('float32')
-
-y = np.where(y == 4, 1, np.where(y == 2, -1, y))
-
-X_gpu = torch.tensor(X, dtype = DTYPE, device = device, requires_grad = True)
-y_gpu = torch.tensor(y, dtype = DTYPE, device = device, requires_grad = True)
-
-
-# n, d = X_example.shape
-
-# def init_params(n_features, device):
-#     w = torch.zeros(n_features, dtype=torch.float32, device=device, requires_grad=True)
-#     b = torch.zeros(1, dtype=torch.float32, device=device, requires_grad=True)
-#     return w, b
-
-# w, b = init_params(d, device)
-
-
-# optimizer = torch.optim.SGD([w, b], lr=LEARNING_RATE)
-
-
-
 # Shuffle row wise
-def shuffle_tensor_row_wise(ts = X_gpu):
-    indices = torch.randperm(ts.shape[0])
-    ts = ts[indices]
+def shuffle_tensor_row_wise(
+    X: torch.Tensor
+    ) -> torch.Tensor:
+    idx = torch.randperm(X.shape[0], device=X.device)
+    return X[idx]
 
-# shuffle_tensor_row_wise(X_gpu)
 
-def create_random_weights_bias(shape = X_gpu.shape[-1] + 1, dtype = DTYPE):
-    print(f"Creating random weights and bias with dtype: {dtype}")
-    weights_bias = torch.rand(1, shape, dtype = dtype, device = device)
+# Creates weights and bias based on the shape of row vectors within 
+def create_random_weights_bias(
+    X: torch.Tensor, 
+    ) -> torch.Tensor:
+    print(f"Creating random weights and bias with dtype: {X.dtype}")
+    # 0.0 <= weights_bias[i] < 1.0
+    weights_bias = torch.rand(1, X.shape[-1] + 1, dtype = X.dtype, device = device)
     weights_bias = torch.squeeze(weights_bias)
     weights_bias[-1] = 0
     return weights_bias
 
-weights_bias = create_random_weights_bias()
-
-def cal_distances(n_point = X_gpu, hyperplain_weights = weights_bias[:-1], hyperplain_bias = weights_bias[-1].unsqueeze(0), dtype = DTYPE):
-    if n_point.dtype != dtype:
-        print(f"Dtype mismatch in cal_distances function, n_point has {n_point.dtype}, while hyperplain_weights has {hyperplain_weights.dtype}, and hyperplain_bias has {hyperplain_bias.dtype}.")
-    raw_scores = torch.matmul(n_point, hyperplain_weights) + hyperplain_bias
-    # weight_norm = torch.norm(hyperplain_weights)
-    # distances = raw_scores / weight_norm
+def cal_distances(
+    X: torch.Tensor, 
+    weights_and_bias: torch.Tensor,
+    ) -> torch.Tensor:
+    weights = weights_and_bias[:-1]
+    bias = weights_and_bias[-1].unsqueeze(0)
+    raw_scores = torch.matmul(X, weights) + bias
+    
+    # Without normalization
     return raw_scores
 
-distances = cal_distances(X_gpu, hyperplain_weights = weights_bias[:-1] + 1, hyperplain_bias = weights_bias[-1])
-
-def hinge_loss(distances = distances, labels = y_gpu, margin=1.0):
+def hinge_loss(
+    distances: torch.Tensor, 
+    labels: torch.Tensor, 
+    margin: float = 1.0
+    ) -> torch.Tensor:
+    if distances.dtype != labels.dtype:
+        raise ValueError("Mismatching dtype in hinge_loss function! Maybe you didn't initiate y and X as the same data type???")
     distances = distances.squeeze()
     losses = torch.clamp(margin - labels * distances, min = 0)
-    return losses.mean()
+    return losses.mean().unsqueeze(0)
 
-def hinge_loss_l2_panalty(distances = distances, weights = weights_bias[:-1], labels = y_gpu, margin=1.0, l2_reg = 1e-4):
+def hinge_loss_l2_panalty(
+    distances: torch.Tensor, 
+    weights_and_bias: torch.Tensor,
+    labels: torch.Tensor, 
+    margin: float = 1.0, 
+    l2_reg: float = 1e-4
+    ) -> torch.Tensor:
+    weights = weights_and_bias.squeeze(0)[:-1]
     distances = distances.squeeze()
     losses = torch.clamp(margin - labels * distances, min = 0)
     l2_penalty = 0.5 * l2_reg * torch.dot(weights, weights)
-    return losses.mean() + l2_penalty
+    return (losses.mean() + l2_penalty).unsqueeze(0)
 
-loss = hinge_loss(distances, y_gpu)
-
-def update_model(X = X_gpu, y = y_gpu, weights = weights_bias[:-1], bias = weights_bias[-1], learning_rate = 0.01, dtype = DTYPE, l2_penalty = False):
-    weights.requires_grad_(True)
-    bias.requires_grad_(True)
+def update_model(
+    X: torch.Tensor, 
+    y: torch.Tensor, 
+    weights_and_bias: torch.Tensor,
+    learning_rate: torch.Tensor, 
+    l2_penalty: bool = False,
+    ) -> tuple[float, torch.Tensor, torch.Tensor]:
     
-    distances = cal_distances(X, weights, bias, dtype = dtype)
+    # Making sure weights and bias is gradient tracked
+    if not weights_and_bias.requires_grad:
+        raise AttributeError("Weights and bias is not gradient-tracked when updating model!!!!")
+    
+    # Making sure all parameters is on the same device:
+    if X.device != y.device or X.device != weights_and_bias.device or X.device != learning_rate.device:
+        raise MemoryError("Four parameters passed into update_model function is not on same device!!! Check if learning rate is set correctly using Torch and on X.device.")
+    
+    # Makeing sure it's one dimensional
+    weights_and_bias = weights_and_bias.squeeze(0)
+    # Retain original gradient before squeeze operation
+    weights_and_bias.retain_grad()
+    
+    weights = weights_and_bias[:-1]   # this is a view
+    bias = weights_and_bias[-1]
+    
+    # Forward pass
+    distances = cal_distances(X, weights_and_bias)
     if l2_penalty:
-        loss = hinge_loss(distances, y)
+        loss = hinge_loss_l2_panalty(distances, weights_and_bias, y)
     else:
-        loss = hinge_loss_l2_panalty(distances, weights, y)
+        loss = hinge_loss(distances, y)
+        
+    
+    # Backword    
     loss.backward()
     
+    # Step
     with torch.no_grad():
-        weights -= learning_rate * weights.grad
-        bias -= learning_rate * bias.grad
-    
-    weights.grad.zero_()
-    bias.grad.zero_()
+        weights_and_bias -= learning_rate * weights_and_bias.grad
+        weights_and_bias.grad.zero_()
     
     return loss.item(), weights, bias
 
     
-def train(X = X_gpu, 
-          y = y_gpu, 
-          weights = weights_bias[:-1], 
-          bias = weights_bias[-1], 
-          num_epochs = NUM_EPOCHS, 
-          start_learning_rate = LEARNING_RATE, 
-          l2_penalty = False, 
-          print_every = int(100), 
-          delta_loss_breaker = DELTA_LOSS_BREAKER, 
-          patience = 10):
+def train(
+    X: torch.Tensor, 
+    y: torch.Tensor, 
+    weights_and_bias: torch.Tensor, 
+    num_epochs = NUM_EPOCHS, 
+    start_learning_rate = LEARNING_RATE, 
+    l2_penalty = False, 
+    print_every = int(100), 
+    delta_loss_breaker = DELTA_LOSS_BREAKER, 
+    patience = 10,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
     print(f"Training with loss function: {'hinge loss.' if not l2_penalty else 'hinge loss with l2 penalty on weights.'}")
+    
     prev_loss = None
     lr = start_learning_rate
     streak = 0
+    weights_and_bias.requires_grad_(True)
+    
     for epoch in range(num_epochs):
-        loss_value, weights, bias = update_model(X, y, weights = weights, bias = bias, learning_rate = lr, dtype = DTYPE, l2_penalty = l2_penalty)
+        loss_value, weights, bias = update_model(X, y, weights_and_bias, learning_rate = lr, l2_penalty = l2_penalty)
         delta_loss = prev_loss - loss_value if prev_loss is not None else None
         lr = adjust_lr(delta_loss, lr)
-        prev_loss = loss_value
         
         small = None
         if delta_loss:
             small = abs(delta_loss) <= delta_loss_breaker and delta_loss != 0 and delta_loss != None
         if small:
+            print(f"Delta Loss smaller than threshold: Epoch {epoch} | Loss: {loss_value:} | Delta loss: {delta_loss}")  
             streak += 1
         else:
             streak = 0
-        if epoch == 1 or epoch % print_every == 0 or epoch == num_epochs or streak >= patience or epoch == num_epochs - 1:
+            
+        if epoch == 1 or epoch % print_every == 0 or streak >= patience or epoch == num_epochs - 1:
             print(f"Epoch {epoch} | Loss: {loss_value:} | Delta loss: {delta_loss}")  
         if streak >= patience:
-            print(f"Exited with delta_Loss squared consecutively being smaller than {delta_loss_breaker} from epoch {epoch - 10} to epoch {epoch}.")
+            print(f"Exited with delta_Loss squared consecutively being smaller than {delta_loss_breaker} from epoch {epoch - patience} to epoch {epoch}.")
             break
-
-    return weights, bias
+        if epoch == NUM_EPOCHS - 1:
+            print("Max epoch reached. ")
+        
+        prev_loss = loss_value
+        
+    return weights, bias.unsqueeze(0)
     
+def get_norm_weights_bias(
+    weights: torch.Tensor,
+    bias: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+    return weights / weights.norm(), bias / weights.norm()
 
-def adjust_lr(delta_loss,
-              lr,
-              decay_factor: float = 0.5,
-              growth_factor: float = 1.05,
-              min_lr: float = 1e-6,
-              max_lr: float = 1.0,
-              thresh: float = 1e-4):
+
+
+
+
+def adjust_lr(
+    delta_loss,
+    lr,
+    decay_factor: float = 0.5,
+    growth_factor: float = 1.05,
+    min_lr: float = 1e-6,
+    max_lr: float = 1.0,
+    thresh: float = 1e-4
+    ) -> float:
     if delta_loss == None:
         return lr
     
@@ -164,16 +186,13 @@ def adjust_lr(delta_loss,
     return lr
 
 
-def score(weights: torch.Tensor, 
-          bias: torch.Tensor,
-          X_test: torch.Tensor,
-          y_test: torch.Tensor,
-          normed = False):
-    if normed:
-        with torch.no_grad():
-            weights_normed = torch.norm(weights)
-            weights = weights / weights_normed
-            bias = bias / weights_normed
+def score(
+    weights: torch.Tensor, 
+    bias: torch.Tensor,
+    X_test: torch.Tensor,
+    y_test: torch.Tensor,
+    ) -> float:
+    
     raw_scores = torch.matmul(X_test, weights) + bias
 
     preds = torch.sign(raw_scores).to(dtype = y_test.dtype)       # +1 or -1
@@ -185,4 +204,21 @@ def score(weights: torch.Tensor,
     return accuracy
 
 
-# train()
+def extract_svc(
+    weights: torch.Tensor,
+    bias: torch.Tensor,
+    norm: bool = True,
+) -> torch.Tensor:
+    if norm:
+        weights_bias = torch.cat((weights.squeeze(), bias.squeeze().unsqueeze(0)), dim = 0)
+        svc = weights_bias / weights.norm()
+        return svc
+    else:
+        unnormed = torch.cat((weights.squeeze(), bias.squeeze().unsqueeze(0)), dim = 0)
+        return unnormed
+    
+    
+def ovo():
+    for i in range(10):
+        for j in range(10):
+            print("do something.")
