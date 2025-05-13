@@ -4,14 +4,17 @@ import numpy as np
 import global_resources as gr
 import os
 
-# GLOBAL VARIABLES
-DTYPE = torch.float32
-NUM_EPOCHS = 3000
-LEARNING_RATE = 0.01
-DELTA_LOSS_BREAKER = 1e-12
 
 device = gr.set_device()
 print(f"Current training device: {device.capitalize()}.")
+
+# GLOBAL VARIABLES
+DTYPE = torch.float64
+NUM_EPOCHS = 3000
+LEARNING_RATE = torch.tensor(0.01, device = device, dtype = DTYPE)
+DELTA_LOSS_BREAKER = 1e-12
+
+
 
 # Shuffle row wise
 def shuffle_tensor_row_wise(
@@ -48,8 +51,6 @@ def hinge_loss(
     labels: torch.Tensor, 
     margin: float = 1.0
     ) -> torch.Tensor:
-    if distances.dtype != labels.dtype:
-        raise ValueError("Mismatching dtype in hinge_loss function! Maybe you didn't initiate y and X as the same data type???")
     distances = distances.squeeze()
     losses = torch.clamp(margin - labels * distances, min = 0)
     return losses.mean().unsqueeze(0)
@@ -114,12 +115,12 @@ def train(
     X: torch.Tensor, 
     y: torch.Tensor, 
     weights_and_bias: torch.Tensor, 
-    num_epochs = NUM_EPOCHS, 
-    start_learning_rate = LEARNING_RATE, 
-    l2_penalty = False, 
-    print_every = int(100), 
-    delta_loss_breaker = DELTA_LOSS_BREAKER, 
-    patience = 10,
+    num_epochs: int = NUM_EPOCHS, 
+    start_learning_rate: torch.Tensor = LEARNING_RATE, 
+    l2_penalty: bool = False, 
+    print_every: int = int(100), 
+    delta_loss_breaker: float = DELTA_LOSS_BREAKER, 
+    patience: int = 10,
     ) -> tuple[torch.Tensor, torch.Tensor]:
     print(f"Training with loss function: {'hinge loss.' if not l2_penalty else 'hinge loss with l2 penalty on weights.'}")
     
@@ -147,7 +148,7 @@ def train(
         if streak >= patience:
             print(f"Exited with delta_Loss squared consecutively being smaller than {delta_loss_breaker} from epoch {epoch - patience} to epoch {epoch}.")
             break
-        if epoch == NUM_EPOCHS - 1:
+        if epoch == num_epochs - 1:
             print("Max epoch reached. ")
         
         prev_loss = loss_value
@@ -161,12 +162,9 @@ def get_norm_weights_bias(
     return weights / weights.norm(), bias / weights.norm()
 
 
-
-
-
 def adjust_lr(
     delta_loss,
-    lr,
+    lr: torch.Tensor,
     decay_factor: float = 0.5,
     growth_factor: float = 1.05,
     min_lr: float = 1e-6,
@@ -174,14 +172,18 @@ def adjust_lr(
     thresh: float = 1e-4
     ) -> float:
     if delta_loss == None:
+        # print(f"Start learning rate: {lr}")
         return lr
     
     if delta_loss >= thresh:
         # good improvement → bump lr
-        lr = min(lr * growth_factor, max_lr)
+        lr = lr * growth_factor
+        lr = torch.clamp(lr, max = max_lr)
+        
     elif delta_loss <= -thresh:
         # loss got worse → cut lr
-        lr = max(lr * decay_factor, min_lr)
+        lr = lr * decay_factor
+        lr = torch.clamp(lr, min = min_lr)
     # else: tiny change → keep lr
     return lr
 
@@ -217,8 +219,60 @@ def extract_svc(
         unnormed = torch.cat((weights.squeeze(), bias.squeeze().unsqueeze(0)), dim = 0)
         return unnormed
     
+
+def ovo_train(
+    X: torch.Tensor, 
+    y: torch.Tensor, 
+    num_epochs: int = NUM_EPOCHS, 
+    start_learning_rate: torch.Tensor = LEARNING_RATE, 
+    l2_penalty: bool = False, 
+    print_every: int = int(100), 
+    delta_loss_breaker: float = DELTA_LOSS_BREAKER, 
+    patience: int = 10,
+    ) -> dict:
+    uniq_labels = y.unique().tolist()
+    if len(uniq_labels) == 2:
+        raise BufferError(f"Unique labels in y: {y} has only two value, istead of using ovo_train, please use train instead.")
+    D = X.size(1)  # Change this to the actual size of your row vector.
+    # weights_tensor = torch.empty((0, D), dtype = X.dtype, device = X.device)
+    # bias_tensor = torch.empty((0), dtype = X.dtype, device = X.device)
+    dic = {}
+    for idx, label_a in enumerate(uniq_labels):
+        for label_b in uniq_labels[idx + 1:]:
+            first_members = X[y == label_a]
+            second_members = X[y == label_b]
+            X_temp = torch.cat([first_members, second_members], dim = 0)
+            y_temp = torch.cat([torch.ones(first_members.size(0), device = X.device, dtype = X.dtype), -torch.ones(second_members.size(0), device = X.device, dtype = X.dtype)], dim = 0)
+            weights, bias = train(
+                X_temp, 
+                y_temp, 
+                weights_and_bias = create_random_weights_bias(first_members),
+                num_epochs = num_epochs,
+                start_learning_rate = start_learning_rate,
+                l2_penalty = l2_penalty,
+                print_every = print_every,
+                delta_loss_breaker = delta_loss_breaker, 
+                patience = patience,
+                )
+            key = (label_a, label_b)
+            weights_bias = torch.cat([weights, bias], dim = 0)
+            # weights_tensor = torch.cat([weights_tensor, weights.squeeze().unsqueeze(0)], dim = 0)
+            # bias_tensor = torch.cat([bias_tensor, bias.unsqueeze(0)], dim = 0)
+            # dic[key] = (weights_tensor, bias_tensor)
+            dic[key] = weights_bias
+    return dic
+
+def ovo_test(
+    dic: dict,
+    x_test: torch.Tensor,
+    y_test: torch.Tensor,
+):
+    keys = list(dic.keys())
     
-def ovo():
-    for i in range(10):
-        for j in range(10):
-            print("do something.")
+    for key in keys:
+        distances = cal_distances(X = x_test, weights_and_bias = dic[key])
+        preds = torch.sign(distances).to(dtype = y_test.dtype)       # +1 or -1
+        votes = torch.where(preds == 1, key[0], key[1])
+        
+        print(y_test)
+        print(votes)
