@@ -7,7 +7,7 @@ import random
 
 
 # Set the working directory to a known absolute path
-default_dir = r'D:\Important Files\Repositories\Quantitative-Investment-Algorithms'
+default_dir = r'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
 os.chdir(default_dir)
 
 global_paths = {
