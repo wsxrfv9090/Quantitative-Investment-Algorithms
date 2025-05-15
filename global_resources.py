@@ -164,3 +164,14 @@ def get_df_dict(start_date = STARTDATE, end_date = ENDDATE, data_dir = None):
     print(f"Reading complete, total skip count in {total_count}, skipped {skip_count} files. ")
     return dfs
 
+def detach_to_pd(
+    ts: torch.Tensor,
+    detach: bool = True,
+) -> pd.DataFrame:
+    if ts.device == 'cpu':
+        ts_np = ts.numpy()
+    else:
+        ts_cpu = ts.detach().cpu()
+        ts_np = ts_cpu.numpy()
+        
+    return pd.DataFrame(ts_np)

@@ -1,0 +1,629 @@
+CPU times: total: 0 ns
+Wall time: 0 ns
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 1
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.1088631818215493 | Relative Ratio: None
+Epoch 1 | Loss: 1.0670159189092645 | Relative Ratio: 1.0392189677498553
+Epoch 1000 | Loss: 0.004995962393397344 | Relative Ratio: 1.0000023184658555
+Epoch 2000 | Loss: 0.004979718140941919 | Relative Ratio: 1.0000042524981985
+Epoch 3000 | Loss: 0.004956536898295101 | Relative Ratio: 1.0000035932291758
+Epoch 4000 | Loss: 0.0049366645059091335 | Relative Ratio: 1.0000017699376975
+Epoch 5000 | Loss: 0.004920395971426018 | Relative Ratio: 1.0000059040217
+Epoch 6000 | Loss: 0.004897733819565722 | Relative Ratio: 1.0000035049351461
+Epoch 7000 | Loss: 0.0048825029947621185 | Relative Ratio: 1.0000062642358702
+Epoch 8000 | Loss: 0.004868387904324879 | Relative Ratio: 1.0000024992720278
+Epoch 9000 | Loss: 0.004848369717873085 | Relative Ratio: 1.0000076886054061
+Epoch 9999 | Loss: 0.004832610860977807 | Relative Ratio: 1.0000021252485773
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 2
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.5349452755813164 | Relative Ratio: None
+Epoch 1 | Loss: 1.486799020794449 | Relative Ratio: 1.0323824902448087
+Epoch 1000 | Loss: 9.56487232601102e-05 | Relative Ratio: 1.0010007505003125
+Epoch 2000 | Loss: 7.609526885864967e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 6.462491472790094e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 5.9481678192644474e-05 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 5.7134084239701246e-05 | Relative Ratio: 1.0006625703437015
+Epoch 6000 | Loss: 5.4783736047202104e-05 | Relative Ratio: 1.0007683233963276
+Epoch 7000 | Loss: 5.543088548733724e-05 | Relative Ratio: 1.0001975731506647
+Epoch 8000 | Loss: 5.550590317894555e-05 | Relative Ratio: 1.000871738038613
+Epoch 9000 | Loss: 5.303508794179426e-05 | Relative Ratio: 1.0001378267455225
+Epoch 9999 | Loss: 5.318515689427725e-05 | Relative Ratio: 1.0308308311026593
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 3
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.6705816930132462 | Relative Ratio: None
+Epoch 1 | Loss: 0.6606895006947567 | Relative Ratio: 1.0149725284087112
+Epoch 1000 | Loss: 0.006555602467427052 | Relative Ratio: 1.0000029081233894
+Epoch 1339 | Loss: 0.0065527054714470635 | Relative Ratio: 1.0000005159386922
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 1329 to epoch 1339.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 4
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.3073549407958405 | Relative Ratio: None
+Epoch 1 | Loss: 2.2677508535291055 | Relative Ratio: 1.0174640380820947
+Epoch 1000 | Loss: 8.002025312274378e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 8.937008087381292e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 3.802875622349053e-05 | Relative Ratio: 1.0010007505003125
+Epoch 4000 | Loss: 1.9016490914890955e-05 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 1.1487615085664766e-05 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 7.721370468027316e-06 | Relative Ratio: 1.001000750500313
+Epoch 7000 | Loss: 4.764503034404323e-05 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 1.7523244317653167e-05 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 2.2902412334031338e-05 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 1.1791202544992601e-05 | Relative Ratio: 1.0010007505003125
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 5
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.14160815529769083 | Relative Ratio: None
+Epoch 1 | Loss: 0.1357392274416751 | Relative Ratio: 1.0432367854645224
+Epoch 1000 | Loss: 0.0001701075861757926 | Relative Ratio: 1.0010007505003125
+Epoch 2000 | Loss: 6.922237829077506e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 4.3167761693111154e-05 | Relative Ratio: 1.0005459420850145
+Epoch 4000 | Loss: 1.8939965084148104e-05 | Relative Ratio: 1.0010007505003125
+Epoch 5000 | Loss: 1.1071705740059899e-05 | Relative Ratio: 1.0010007505003122
+Epoch 6000 | Loss: 8.04796238191877e-06 | Relative Ratio: 1.0010007505003125
+Epoch 7000 | Loss: 6.7732206309664564e-06 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 6.883983897928603e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 0.0002375849475879136 | Relative Ratio: 1.0010007505003122
+Epoch 9999 | Loss: 9.653673560060704e-05 | Relative Ratio: 1.001000750500313
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 6
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.512122278189955 | Relative Ratio: None
+Epoch 1 | Loss: 2.415040458048473 | Relative Ratio: 1.040198838002048
+Epoch 1000 | Loss: 0.00013135746449633587 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 5.444060146172647e-05 | Relative Ratio: 1.0010007505003125
+Epoch 3000 | Loss: 3.109990057831694e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 2.2723262480855118e-05 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 2.343569897542537e-05 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 2.1873799618282787e-05 | Relative Ratio: 1.0010007505003125
+Epoch 7000 | Loss: 2.5411906739778833e-05 | Relative Ratio: 1.001000750500313
+Epoch 8000 | Loss: 4.076077887867136e-05 | Relative Ratio: 1.001000750500313
+Epoch 9000 | Loss: 2.9560994244100683e-05 | Relative Ratio: 1.001000750500313
+Epoch 9999 | Loss: 3.2344487055286965e-05 | Relative Ratio: 1.0010007505003125
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.829768823393355 | Relative Ratio: None
+Epoch 1 | Loss: 0.8133098167647985 | Relative Ratio: 1.020237068690536
+Epoch 1000 | Loss: 0.006561730328846397 | Relative Ratio: 0.9999988119944977
+Epoch 2000 | Loss: 0.006545828417128323 | Relative Ratio: 1.0000042688807915
+Epoch 3000 | Loss: 0.0065307936683633985 | Relative Ratio: 1.000005064774167
+Epoch 4000 | Loss: 0.0065145952602411366 | Relative Ratio: 1.000000959373519
+Epoch 5000 | Loss: 0.006500350846623078 | Relative Ratio: 1.0000042827093303
+Epoch 6000 | Loss: 0.006484664211857362 | Relative Ratio: 1.0000028196286008
+Epoch 7000 | Loss: 0.006468978528715315 | Relative Ratio: 1.0000078655632076
+Epoch 8000 | Loss: 0.006453438452474934 | Relative Ratio: 1.000004005967584
+Epoch 9000 | Loss: 0.006439067598294477 | Relative Ratio: 1.0000023984014288
+Epoch 9999 | Loss: 0.00642386422815247 | Relative Ratio: 1.0000044459738626
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.6091095549760379 | Relative Ratio: None
+Epoch 1 | Loss: 0.597871412722095 | Relative Ratio: 1.0187969219046216
+Epoch 358 | Loss: 0.005747722900088178 | Relative Ratio: 1.0000003311475472
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 348 to epoch 358.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 0 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.3287964625796391 | Relative Ratio: None
+Epoch 1 | Loss: 1.3014123529859405 | Relative Ratio: 1.0210418392993343
+Epoch 1000 | Loss: 0.007766234583187697 | Relative Ratio: 1.0000099962248743
+Epoch 2000 | Loss: 0.007738845651894284 | Relative Ratio: 1.0000015079993252
+Epoch 3000 | Loss: 0.007713143728970031 | Relative Ratio: 1.0000052750816046
+Epoch 4000 | Loss: 0.007687345756223951 | Relative Ratio: 1.0000143651088838
+Epoch 5000 | Loss: 0.007660252254120418 | Relative Ratio: 1.0000038815285428
+Epoch 6000 | Loss: 0.007633801170936845 | Relative Ratio: 1.000005892842385
+Epoch 7000 | Loss: 0.007605137250263598 | Relative Ratio: 1.000004091806717
+Epoch 8000 | Loss: 0.007578108233686868 | Relative Ratio: 1.0000117454113917
+Epoch 9000 | Loss: 0.007553321275522121 | Relative Ratio: 0.9999959105909082
+Epoch 9999 | Loss: 0.0075089142667683515 | Relative Ratio: 1.000002436759159
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 2
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.2927983143057444 | Relative Ratio: None
+Epoch 1 | Loss: 1.2685267020126942 | Relative Ratio: 1.0191337023135105
+Epoch 964 | Loss: 0.009675209743622551 | Relative Ratio: 0.999999181898381
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 954 to epoch 964.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 3
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.6636646068356294 | Relative Ratio: None
+Epoch 1 | Loss: 0.6596827419869448 | Relative Ratio: 1.0060360300417917
+Epoch 1000 | Loss: 0.01989533115080036 | Relative Ratio: 1.0000048605505083
+Epoch 1054 | Loss: 0.019893962021986643 | Relative Ratio: 0.9999995964026515
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 1044 to epoch 1054.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 4
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.6720010633213458 | Relative Ratio: None
+Epoch 1 | Loss: 1.6159493252505934 | Relative Ratio: 1.0346865691856149
+Epoch 1000 | Loss: 8.091977276953615e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 3.941449049396788e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.5119981584904559e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 7.4320224796086e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 5.315069479904389e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 2.8418500951884477e-06 | Relative Ratio: 1.0010007505003125
+Epoch 7000 | Loss: 5.117566154279568e-06 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 1.0422169432207833e-05 | Relative Ratio: 1.001000750500313
+Epoch 9000 | Loss: 4.6134021238336896e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 4.5434076253135305e-06 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 5
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.7826311205148393 | Relative Ratio: None
+Epoch 1 | Loss: 1.7044780929221506 | Relative Ratio: 1.0458515881883255
+Epoch 1000 | Loss: 8.340233712316185e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 3.154681405552773e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.2791482165227687e-05 | Relative Ratio: 1.001000750500313
+Epoch 4000 | Loss: 5.146589563542628e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 4.043126333650799e-05 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 1.4870111329577088e-05 | Relative Ratio: 1.001000750500313
+Epoch 7000 | Loss: 5.4690403590320865e-06 | Relative Ratio: 1.0010007505003125
+Epoch 8000 | Loss: 2.0114444193318897e-06 | Relative Ratio: 1.001000750500313
+Epoch 9000 | Loss: 2.7525887130420758e-05 | Relative Ratio: 1.0010007505003125
+Epoch 9999 | Loss: 1.013380716947268e-05 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 6
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.288931064980741 | Relative Ratio: None
+Epoch 1 | Loss: 1.2567299754125203 | Relative Ratio: 1.0256229183660959
+Epoch 1000 | Loss: 0.014444659179290428 | Relative Ratio: 1.0000011218421523
+Epoch 2000 | Loss: 0.01398960270511976 | Relative Ratio: 1.0000082199320108
+Epoch 3000 | Loss: 0.01394852645019326 | Relative Ratio: 1.0000023431832297
+Epoch 3251 | Loss: 0.013943175491833576 | Relative Ratio: 1.0000008880395201
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 3241 to epoch 3251.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.7626606730597734 | Relative Ratio: None
+Epoch 1 | Loss: 1.7463826453484435 | Relative Ratio: 1.0093209971793335
+Epoch 1000 | Loss: 0.012098796803698264 | Relative Ratio: 1.0000021928712133
+Epoch 2000 | Loss: 0.012032739170446827 | Relative Ratio: 1.0000022119632832
+Epoch 3000 | Loss: 0.01200764282740617 | Relative Ratio: 1.000000049660166
+Epoch 3833 | Loss: 0.011992616884431914 | Relative Ratio: 1.0000006663687644
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 3823 to epoch 3833.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.4156404259360222 | Relative Ratio: None
+Epoch 1 | Loss: 1.381203327061418 | Relative Ratio: 1.024932678773567
+Epoch 967 | Loss: 0.0026476994779035187 | Relative Ratio: 0.9999996756616898
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 957 to epoch 967.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 1 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.4139740753778614 | Relative Ratio: None
+Epoch 1 | Loss: 2.3808731370340475 | Relative Ratio: 1.013902856825479
+Epoch 571 | Loss: 0.00795963249395876 | Relative Ratio: 1.0000000060211778
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 561 to epoch 571.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 3
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.8339052173764199 | Relative Ratio: None
+Epoch 1 | Loss: 0.8301156649582704 | Relative Ratio: 1.0045650896352378
+Epoch 1000 | Loss: 0.028343289624577928 | Relative Ratio: 1.0010991484231662
+Epoch 2000 | Loss: 0.025838838590388564 | Relative Ratio: 1.000549512198488
+Epoch 3000 | Loss: 0.024997002897110827 | Relative Ratio: 1.000003147359263
+Epoch 3261 | Loss: 0.024990820631805438 | Relative Ratio: 1.000000339834459
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 3251 to epoch 3261.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 4
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.4063974871660514 | Relative Ratio: None
+Epoch 1 | Loss: 1.3605420372335013 | Relative Ratio: 1.0337038097152746
+Epoch 1000 | Loss: 9.71840992340102e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 3.8828815358123136e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.6522781370751446e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 8.599759991769903e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 3.4304901620273144e-06 | Relative Ratio: 1.0010007505003125
+Epoch 6000 | Loss: 8.167368458559917e-06 | Relative Ratio: 1.001000750500313
+Epoch 7000 | Loss: 5.015652022741828e-06 | Relative Ratio: 1.0010007505003125
+Epoch 8000 | Loss: 3.870010708857032e-06 | Relative Ratio: 1.001000750500313
+Epoch 9000 | Loss: 2.358807167368164e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 1.8992749107828416e-06 | Relative Ratio: 1.0010007505003131
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 5
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.0355255448983285 | Relative Ratio: None
+Epoch 1 | Loss: 0.9839490791800812 | Relative Ratio: 1.0524178199965648
+Epoch 1000 | Loss: 7.694563305157017e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 3.0602520648394836e-05 | Relative Ratio: 1.001000750500313
+Epoch 3000 | Loss: 1.2730744205859874e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 2.0707511615967527e-05 | Relative Ratio: 1.001000750500313
+Epoch 5000 | Loss: 8.219451623847015e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 3.565789066579023e-06 | Relative Ratio: 1.0010007505003125
+Epoch 7000 | Loss: 1.6328764390388122e-06 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 8.484355428927522e-07 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 1.0407646872288464e-05 | Relative Ratio: 1.001000750500313
+Epoch 9999 | Loss: 3.831632600686504e-06 | Relative Ratio: 1.0010007505003122
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 6
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.6939569794995117 | Relative Ratio: None
+Epoch 1 | Loss: 2.6320652049398805 | Relative Ratio: 1.023514529367841
+Epoch 1000 | Loss: 0.00248086948063781 | Relative Ratio: 1.0000280881869175
+Epoch 1577 | Loss: 0.0024690227185780733 | Relative Ratio: 1.0000008738010686
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 1567 to epoch 1577.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.1152571031556762 | Relative Ratio: None
+Epoch 1 | Loss: 1.09801859884077 | Relative Ratio: 1.015699646921378
+Epoch 1000 | Loss: 0.00838926831947318 | Relative Ratio: 1.0001075041013803
+Epoch 1942 | Loss: 0.00800903845358467 | Relative Ratio: 1.0000001079015457
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 1932 to epoch 1942.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.086192762603193 | Relative Ratio: None
+Epoch 1 | Loss: 1.0728171282166303 | Relative Ratio: 1.012467767371311
+Epoch 800 | Loss: 0.007974159275427287 | Relative Ratio: 1.0000006267045352
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 790 to epoch 800.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 2 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.333394594086863 | Relative Ratio: None
+Epoch 1 | Loss: 2.300535273723269 | Relative Ratio: 1.0142833368994222
+Epoch 1000 | Loss: 0.004048024246620568 | Relative Ratio: 1.0000036890891268
+Epoch 2000 | Loss: 0.004038171916962377 | Relative Ratio: 1.0000074536774293
+Epoch 3000 | Loss: 0.004029824411025454 | Relative Ratio: 1.0000018455503163
+Epoch 4000 | Loss: 0.004019472484606885 | Relative Ratio: 1.0000027281175659
+Epoch 5000 | Loss: 0.004007686047869297 | Relative Ratio: 1.000002736619708
+Epoch 5186 | Loss: 0.004006633713897268 | Relative Ratio: 1.0000006774216794
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 5176 to epoch 5186.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 3 and label b: 4
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.140455954698872 | Relative Ratio: None
+Epoch 1 | Loss: 2.1224089240692696 | Relative Ratio: 1.008503088365743
+Epoch 1000 | Loss: 4.153259877829168e-05 | Relative Ratio: 1.001000750500313
+Epoch 2000 | Loss: 1.716145711610035e-05 | Relative Ratio: 1.001000750500313
+Epoch 3000 | Loss: 7.955623411970242e-06 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 4.4975814959977305e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 3.22166629601697e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 2.7762313024578065e-06 | Relative Ratio: 1.001000750500313
+Epoch 7000 | Loss: 2.6274172161693073e-06 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 2.3681988272467997e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 2.290158820650581e-06 | Relative Ratio: 1.0010007505003125
+Epoch 9999 | Loss: 2.1943924711572555e-06 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 3 and label b: 5
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.3815263287829813 | Relative Ratio: None
+Epoch 1 | Loss: 1.3652243745807588 | Relative Ratio: 1.01194086078871
+Epoch 1000 | Loss: 5.381207485438058e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 1.9791405905380895e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 7.27903075232674e-06 | Relative Ratio: 1.0010007505003125
+Epoch 4000 | Loss: 6.554313646033824e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 2.4105943164403428e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 8.865863418011516e-07 | Relative Ratio: 1.001000750500313
+Epoch 7000 | Loss: 3.260753317584623e-07 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 1.704857953134133e-06 | Relative Ratio: 1.0010007505003122
+Epoch 9000 | Loss: 6.270253628540004e-07 | Relative Ratio: 1.001000750500313
+Epoch 9999 | Loss: 2.3084284577003516e-07 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 3 and label b: 6
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.272726352227879 | Relative Ratio: None
+Epoch 1 | Loss: 2.252940625462537 | Relative Ratio: 1.008782178518921
+Epoch 556 | Loss: 0.0012710971951972892 | Relative Ratio: 1.0000009715063083
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 546 to epoch 556.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 3 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.8464509058535392 | Relative Ratio: None
+Epoch 1 | Loss: 1.8363166119049699 | Relative Ratio: 1.0055188162449047
+Epoch 1000 | Loss: 0.022394282124697018 | Relative Ratio: 1.0000023190400416
+Epoch 2000 | Loss: 0.02231962341630112 | Relative Ratio: 1.000012169290324
+Epoch 3000 | Loss: 0.02215048142699882 | Relative Ratio: 1.000003421791814
+Epoch 4000 | Loss: 0.021994480459279448 | Relative Ratio: 1.0000055286171063
+Epoch 4665 | Loss: 0.021968432600783374 | Relative Ratio: 1.0000005360118451
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 4655 to epoch 4665.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 3 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.6839419955954256 | Relative Ratio: None
+Epoch 1 | Loss: 1.6732111735791537 | Relative Ratio: 1.0064133100386352
+Epoch 891 | Loss: 0.01636252620025842 | Relative Ratio: 0.9999998353104244
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 881 to epoch 891.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 3 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.7669160648267939 | Relative Ratio: None
+Epoch 1 | Loss: 1.753285837348124 | Relative Ratio: 1.0077741045916881
+Epoch 889 | Loss: 0.020117703111014955 | Relative Ratio: 1.0000008978037982
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 879 to epoch 889.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 4 and label b: 5
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.00023531783300010547 | Relative Ratio: None
+Epoch 1 | Loss: 0.00023531736236467478 | Relative Ratio: 1.000002000003
+Epoch 1000 | Loss: 9.646059557317091e-05 | Relative Ratio: 1.001000750500313
+Epoch 2000 | Loss: 3.547699667833943e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 0.001403469028335535 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 0.0005161782980973073 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 0.00018984390111025196 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 6.982220469479143e-05 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 0.025163357631320774 | Relative Ratio: 1.0004951667165696
+Epoch 8000 | Loss: 0.009290146575173516 | Relative Ratio: 1.001000750500313
+Epoch 9000 | Loss: 0.0034167993389456917 | Relative Ratio: 1.0010007505003122
+Epoch 9999 | Loss: 0.001257913522408899 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 4 and label b: 6
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 3.7595999946916288 | Relative Ratio: None
+Epoch 1 | Loss: 3.0703220658559656 | Relative Ratio: 1.224496946591009
+Epoch 1000 | Loss: 8.403568945294087e-05 | Relative Ratio: 1.0010007505003125
+Epoch 2000 | Loss: 3.0907272113227093e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 6.817104381242912e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 2.5072454513904764e-05 | Relative Ratio: 1.001000750500313
+Epoch 5000 | Loss: 9.221334164714771e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 0.0001326243595145848 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 0.00011398483579848294 | Relative Ratio: 1.0010007505003125
+Epoch 8000 | Loss: 4.192219234160095e-05 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 1.541845630969072e-05 | Relative Ratio: 1.0010007505003125
+Epoch 9999 | Loss: 5.676389732800491e-06 | Relative Ratio: 1.001000750500313
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 4 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.1988808418040442 | Relative Ratio: None
+Epoch 1 | Loss: 1.1750679143826652 | Relative Ratio: 1.0202651498946675
+Epoch 1000 | Loss: 9.408575661977774e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 3.460356071041398e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.3452762657928788e-05 | Relative Ratio: 1.0010007505003125
+Epoch 4000 | Loss: 6.463638131289608e-06 | Relative Ratio: 1.001000750500313
+Epoch 5000 | Loss: 4.696641231437707e-06 | Relative Ratio: 1.001000750500313
+Epoch 6000 | Loss: 4.108726187438335e-06 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 3.0275849118296235e-06 | Relative Ratio: 1.001000750500313
+Epoch 8000 | Loss: 2.329229081207647e-06 | Relative Ratio: 1.0010007505003125
+Epoch 9000 | Loss: 2.6012806218719665e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 3.2374557458833527e-06 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 4 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.7629966283170175 | Relative Ratio: None
+Epoch 1 | Loss: 1.7247033313705369 | Relative Ratio: 1.0222028312057883
+Epoch 171 | Loss: 0.008810647793727065 | Relative Ratio: 0.9999998968565108
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 161 to epoch 171.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 4 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 2.1256574018274446 | Relative Ratio: None
+Epoch 1 | Loss: 2.087431452549715 | Relative Ratio: 1.018312433316571
+Epoch 1000 | Loss: 9.610597900899226e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 3.53465731557113e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.3917788802726847e-05 | Relative Ratio: 1.001000750500313
+Epoch 4000 | Loss: 6.846644352070314e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 4.0697965604985405e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 3.904988556763038e-06 | Relative Ratio: 1.0010007505003125
+Epoch 7000 | Loss: 2.5396359767718895e-06 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 3.1585126247986068e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 2.198048711054137e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 2.9538342781661134e-06 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 5 and label b: 6
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 8.191947910568212 | Relative Ratio: None
+Epoch 1 | Loss: 7.081545678285952 | Relative Ratio: 1.156802241025864
+Epoch 1000 | Loss: 0.0001762270325082937 | Relative Ratio: 1.0010007505003125
+Epoch 2000 | Loss: 6.481409128547043e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 2.383780949703952e-05 | Relative Ratio: 1.001000750500313
+Epoch 4000 | Loss: 8.767247219657146e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 0.0022870249561725907 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 0.0008411390816249644 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 0.00030936039973124626 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 0.00011377887321201366 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 7.55638163638943e-05 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 2.78192357758696e-05 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 5 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.9248613940699167 | Relative Ratio: None
+Epoch 1 | Loss: 0.908116821735539 | Relative Ratio: 1.0184387866556381
+Epoch 1000 | Loss: 0.0001002561302785056 | Relative Ratio: 1.0010007505003125
+Epoch 2000 | Loss: 3.9355231818979335e-05 | Relative Ratio: 1.001000750500313
+Epoch 3000 | Loss: 1.447436043931643e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 5.323488147418625e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 4.50819218354024e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 1.658056516968643e-06 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 6.098123818899194e-07 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 1.5723351640848139e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 5.782851439182688e-07 | Relative Ratio: 1.0010007505003125
+Epoch 9999 | Loss: 1.8564147620175763e-06 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 5 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.1988120697691078 | Relative Ratio: None
+Epoch 1 | Loss: 1.173635744245459 | Relative Ratio: 1.0214515667634465
+Epoch 1000 | Loss: 0.00010788997648142054 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 4.580741238028067e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.6847391488743204e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 6.196259190950574e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 2.278906380675765e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 5.210887573929919e-05 | Relative Ratio: 1.001000750500313
+Epoch 7000 | Loss: 1.9164990642347845e-05 | Relative Ratio: 1.0010007505003127
+Epoch 8000 | Loss: 7.048643078750483e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 1.3577035310715917e-05 | Relative Ratio: 1.0010007505003125
+Epoch 9999 | Loss: 4.9984604354444156e-06 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 5 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.7426387346076955 | Relative Ratio: None
+Epoch 1 | Loss: 1.7021913231707906 | Relative Ratio: 1.0237619654655274
+Epoch 1000 | Loss: 8.103863598932173e-05 | Relative Ratio: 1.001000750500313
+Epoch 2000 | Loss: 2.9804993455897355e-05 | Relative Ratio: 1.0010007505003127
+Epoch 3000 | Loss: 1.0961902604371804e-05 | Relative Ratio: 1.0010007505003127
+Epoch 4000 | Loss: 4.031650229534189e-06 | Relative Ratio: 1.0010007505003127
+Epoch 5000 | Loss: 2.2062478036527664e-06 | Relative Ratio: 1.0010007505003127
+Epoch 6000 | Loss: 8.114302585080945e-07 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 1.0748146387570084e-06 | Relative Ratio: 1.001000750500313
+Epoch 8000 | Loss: 4.607076870263497e-06 | Relative Ratio: 1.0010007505003125
+Epoch 9000 | Loss: 1.694425063954842e-06 | Relative Ratio: 1.0010007505003127
+Epoch 9999 | Loss: 6.238119331043442e-07 | Relative Ratio: 1.0010007505003127
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 6 and label b: 7
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.4569161834384698 | Relative Ratio: None
+Epoch 1 | Loss: 1.4290559748552671 | Relative Ratio: 1.019495533466437
+Epoch 299 | Loss: 0.0002688064727756262 | Relative Ratio: 0.999999513548642
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 289 to epoch 299.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 6 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 0.665091048939904 | Relative Ratio: None
+Epoch 1 | Loss: 0.6460382073519845 | Relative Ratio: 1.029491818550507
+Epoch 1000 | Loss: 9.88380866209559e-05 | Relative Ratio: 1.0010007505003127
+Epoch 2000 | Loss: 4.5746088695385616e-05 | Relative Ratio: 1.001000750500313
+Epoch 3000 | Loss: 3.677428574045392e-05 | Relative Ratio: 1.001000750500313
+Epoch 4000 | Loss: 3.3624510767887216e-05 | Relative Ratio: 1.0003351081097271
+Epoch 5000 | Loss: 2.9700288850435904e-05 | Relative Ratio: 1.0002116807844448
+Epoch 6000 | Loss: 2.6749591559963867e-05 | Relative Ratio: 1.0010007505003127
+Epoch 7000 | Loss: 2.6264314661732225e-05 | Relative Ratio: 1.0007683233963276
+Epoch 8000 | Loss: 2.44429635073921e-05 | Relative Ratio: 1.0010007505003127
+Epoch 9000 | Loss: 2.320767297975418e-05 | Relative Ratio: 1.001000750500313
+Epoch 9999 | Loss: 2.3821234971426845e-05 | Relative Ratio: 1.0003039458322565
+Max epoch reached. 
+-------------------------------------------------------------------------------------------------------
+Training on label a: 6 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.8405752045889818 | Relative Ratio: None
+Epoch 1 | Loss: 1.8008286211050082 | Relative Ratio: 1.0220712748665581
+Epoch 430 | Loss: 0.0015124227718659382 | Relative Ratio: 1.0000008723341705
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 420 to epoch 430.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 7 and label b: 8
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.4603455796797304 | Relative Ratio: None
+Epoch 1 | Loss: 1.4461113294563845 | Relative Ratio: 1.0098431219875006
+Epoch 1000 | Loss: 0.014864855387424832 | Relative Ratio: 0.9999990655171167
+Epoch 1053 | Loss: 0.0148644280238567 | Relative Ratio: 0.9999997110391078
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 1043 to epoch 1053.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 7 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.5583435051108747 | Relative Ratio: None
+Epoch 1 | Loss: 1.5395577983098818 | Relative Ratio: 1.012202014644475
+Epoch 865 | Loss: 0.017845738962097124 | Relative Ratio: 1.0000007118725094
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 855 to epoch 865.
+-------------------------------------------------------------------------------------------------------
+Training on label a: 8 and label b: 9
+Creating random weights and bias with dtype: torch.float64
+Training with loss function: hinge loss with l2 penalty on weights.
+Training with relative breaker.
+Epoch 0 | Loss: 1.4922092631344772 | Relative Ratio: None
+Epoch 1 | Loss: 1.476242225965251 | Relative Ratio: 1.0108160008489027
+Epoch 1000 | Loss: 0.02190612438476308 | Relative Ratio: 1.000000655041789
+Epoch 1554 | Loss: 0.021896603652143517 | Relative Ratio: 1.0000004273683247
+Exited with relative_ratio consecutively being smaller than 1e-06 from epoch 1544 to epoch 1554.

@@ -13,7 +13,7 @@ DTYPE = torch.float64
 NUM_EPOCHS = 3000
 LEARNING_RATE = torch.tensor(0.01, device = device, dtype = DTYPE)
 DELTA_LOSS_BREAKER = 1e-12
-
+RELATIVE_BREAKER = 1e-7
 
 
 # Shuffle row wise
@@ -121,6 +121,8 @@ def train(
     print_every: int = int(100), 
     delta_loss_breaker: float = DELTA_LOSS_BREAKER, 
     patience: int = 10,
+    relative: bool = True,
+    relative_breaker: float = RELATIVE_BREAKER
     ) -> tuple[torch.Tensor, torch.Tensor]:
     print(f"Training with loss function: {'hinge loss.' if not l2_penalty else 'hinge loss with l2 penalty on weights.'}")
     
@@ -129,27 +131,71 @@ def train(
     streak = 0
     weights_and_bias.requires_grad_(True)
     
+    if not relative:
+        print("Training with delta loss breaker.")
+    else:
+        print("Training with relative breaker.")
+    
     for epoch in range(num_epochs):
         loss_value, weights, bias = update_model(X, y, weights_and_bias, learning_rate = lr, l2_penalty = l2_penalty)
-        delta_loss = prev_loss - loss_value if prev_loss is not None else None
-        lr = adjust_lr(delta_loss, lr)
+        if not relative:
+            delta_loss = prev_loss - loss_value if prev_loss is not None else None
+        else:
+            relative_ratio = abs(prev_loss / loss_value) if prev_loss is not None else None
+        
+        
+        # lr = adjust_lr(delta_loss, lr)
+        if not relative:
+            delta = prev_loss - loss_value if prev_loss is not None else None
+            lr = adjust_lr(
+                lr=lr,
+                relative=False,
+                delta_loss=delta,
+                abs_thresh=delta_loss_breaker,
+            )
+        else:
+            ratio = abs(prev_loss / loss_value) if prev_loss is not None else None
+            # print(f"Prev learning rate: {lr.item()}")
+            lr = adjust_lr(
+                lr=lr,
+                relative=True,
+                relative_ratio=ratio,
+                rel_thresh=relative_breaker,
+            )
+            # print(f"After adjust learning rate: {lr.item()}")
+        
         
         small = None
-        if delta_loss:
-            small = abs(delta_loss) <= delta_loss_breaker and delta_loss != 0 and delta_loss != None
+        if not relative:
+            if delta_loss:
+                small = abs(delta_loss) <= delta_loss_breaker and delta_loss != 0
+        else:
+            if relative_ratio != 0 and relative_ratio:
+                small = (relative_ratio - 1) <= relative_breaker
+            elif relative_ratio == 0:
+                raise ValueError("Relative ratio is zero somehow.")
+            
         if small:
-            print(f"Delta Loss smaller than threshold: Epoch {epoch} | Loss: {loss_value:} | Delta loss: {delta_loss}")  
             streak += 1
         else:
             streak = 0
-            
-        if epoch == 1 or epoch % print_every == 0 or streak >= patience or epoch == num_epochs - 1:
-            print(f"Epoch {epoch} | Loss: {loss_value:} | Delta loss: {delta_loss}")  
-        if streak >= patience:
-            print(f"Exited with delta_Loss squared consecutively being smaller than {delta_loss_breaker} from epoch {epoch - patience} to epoch {epoch}.")
-            break
-        if epoch == num_epochs - 1:
-            print("Max epoch reached. ")
+        
+        if not relative:
+            if epoch == 1 or epoch % print_every == 0 or streak >= patience or epoch == num_epochs - 1:
+                print(f"Epoch {epoch} | Loss: {loss_value:} | Delta loss: {delta_loss}")  
+            if streak >= patience:
+                print(f"Exited with delta_Loss squared consecutively being smaller than {delta_loss_breaker} from epoch {epoch - patience} to epoch {epoch}.")
+                break
+            if epoch == num_epochs - 1:
+                print("Max epoch reached. ")
+        else:
+            if epoch == 1 or epoch % print_every == 0 or streak >= patience or epoch == num_epochs - 1:
+                print(f"Epoch {epoch} | Loss: {loss_value:} | Relative Ratio: {relative_ratio}")
+            if streak >= patience:
+                print(f"Exited with relative_ratio consecutively being smaller than {relative_breaker} from epoch {epoch - patience} to epoch {epoch}.")
+                break
+            if epoch == num_epochs - 1:
+                print("Max epoch reached. ")
         
         prev_loss = loss_value
         
@@ -162,30 +208,101 @@ def get_norm_weights_bias(
     return weights / weights.norm(), bias / weights.norm()
 
 
+# def adjust_lr(
+#     delta_loss,
+#     lr: torch.Tensor,
+#     decay_factor: float = 0.5,
+#     growth_factor: float = 1.05,
+#     min_lr: float = 1e-6,
+#     max_lr: float = 1.0,
+#     thresh: float = 1e-4,
+#     ) -> float:
+#     if delta_loss == None:
+#         # print(f"Start learning rate: {lr}")
+#         return lr
+    
+#     if delta_loss >= thresh:
+#         # good improvement → bump lr
+#         lr = lr * growth_factor
+#         lr = torch.clamp(lr, max = max_lr)
+        
+#     elif delta_loss <= -thresh:
+#         # loss got worse → cut lr
+#         lr = lr * decay_factor
+#         lr = torch.clamp(lr, min = min_lr)
+#     # else: tiny change → keep lr
+#     return lr
+
+
 def adjust_lr(
-    delta_loss,
+    *,
     lr: torch.Tensor,
+    relative: bool = False,
+    delta_loss: float | None = None,
+    relative_ratio: float | None = None,
     decay_factor: float = 0.5,
     growth_factor: float = 1.05,
     min_lr: float = 1e-6,
-    max_lr: float = 1.0,
-    thresh: float = 1e-4
-    ) -> float:
-    if delta_loss == None:
-        # print(f"Start learning rate: {lr}")
-        return lr
-    
-    if delta_loss >= thresh:
-        # good improvement → bump lr
-        lr = lr * growth_factor
-        lr = torch.clamp(lr, max = max_lr)
-        
-    elif delta_loss <= -thresh:
-        # loss got worse → cut lr
-        lr = lr * decay_factor
-        lr = torch.clamp(lr, min = min_lr)
-    # else: tiny change → keep lr
-    return lr
+    max_lr: float = 5.0,
+    abs_thresh: float = 1e-7,
+    rel_thresh: float = 0.01,
+) -> torch.Tensor:
+    """
+    Adjust learning rate based on either absolute change in loss (delta_loss)
+    or relative change (relative_ratio).
+
+    Parameters
+    ----------
+    lr : torch.Tensor
+        Current learning rate.
+    relative : bool
+        If True, use relative_ratio mode; otherwise use delta_loss mode.
+    delta_loss : float or None
+        prev_loss - curr_loss (only if relative=False).
+    relative_ratio : float or None
+        abs(prev_loss / curr_loss) (only if relative=True).
+    decay_factor : float
+        Factor to multiply lr when performance worsens.
+    growth_factor : float
+        Factor to multiply lr when performance improves.
+    min_lr : float
+        Floor for lr after decay.
+    max_lr : float
+        Ceiling for lr after growth.
+    abs_thresh : float
+        Minimum |delta_loss| to count as “significant” improvement or decline.
+    rel_thresh : float
+        Minimum deviation from 1.0 to count as “significant” in relative mode.
+
+    Returns
+    -------
+    torch.Tensor
+        The updated (and clamped) learning rate.
+    """
+    # nothing to compare yet
+    if relative:
+        if relative_ratio is None:
+            return lr
+        # relative_ratio > 1+rel_thresh → improvement
+        if relative_ratio >= 1.0 + rel_thresh:
+            lr = lr * growth_factor
+        # relative_ratio < 1-rel_thresh → got worse
+        elif relative_ratio <= 1.0 - rel_thresh:
+            lr = lr * decay_factor
+        # Else the relative ratio is not "significant" so it doesn't change
+    else:
+        if delta_loss is None:
+            return lr
+        # delta_loss = prev_loss - curr_loss
+        if delta_loss >= abs_thresh:
+            lr = lr * growth_factor
+        elif delta_loss <= -abs_thresh:
+            lr = lr * decay_factor
+        # Else the relative ratio is not "significant" so it doesn't change
+
+    # clamp to [min_lr, max_lr]
+    return torch.clamp(lr, min = min_lr, max = max_lr)
+
 
 
 def score(
@@ -229,6 +346,8 @@ def ovo_train(
     print_every: int = int(100), 
     delta_loss_breaker: float = DELTA_LOSS_BREAKER, 
     patience: int = 10,
+    relative: bool = False,
+    relative_breaker: float = RELATIVE_BREAKER
     ) -> dict:
     uniq_labels = y.unique().tolist()
     if len(uniq_labels) == 2:
@@ -239,6 +358,8 @@ def ovo_train(
     dic = {}
     for idx, label_a in enumerate(uniq_labels):
         for label_b in uniq_labels[idx + 1:]:
+            print("-------------------------------------------------------------------------------------------------------")
+            print(f"Training on label a: {label_a} and label b: {label_b}")
             first_members = X[y == label_a]
             second_members = X[y == label_b]
             X_temp = torch.cat([first_members, second_members], dim = 0)
@@ -253,6 +374,8 @@ def ovo_train(
                 print_every = print_every,
                 delta_loss_breaker = delta_loss_breaker, 
                 patience = patience,
+                relative = relative,
+                relative_breaker = relative_breaker
                 )
             key = (label_a, label_b)
             weights_bias = torch.cat([weights, bias], dim = 0)
@@ -262,17 +385,52 @@ def ovo_train(
             dic[key] = weights_bias
     return dic
 
-def ovo_test(
+def ovo_predict(
     dic: dict,
-    x_test: torch.Tensor,
+    X: torch.Tensor,
+    dtype: torch.dtype = None
+) -> torch.Tensor:
+    if dtype == None:
+        dtype = X.dtype
+    # X.size(0)
+    votes = torch.empty((X.size(0), 0), dtype = dtype, device = X.device)
+    for (label_i, label_j), weights_bias in dic.items():
+        if weights_bias.device != X.device:
+            raise MemoryError('Weights and bias tensor and X tensor not on same device!!!!')
+        distances = cal_distances(X = X, weights_and_bias = weights_bias)
+        preds = torch.sign(distances).to(dtype = dtype)
+        votes_temp = torch.where(preds == 1, label_i, label_j).unsqueeze(0)
+        votes = torch.cat([votes, votes_temp.T], dim = 1)
+    final_predictions, _ = torch.mode(votes, dim = 1)
+    return final_predictions
+
+
+def ovo_score(
+    X_test: torch.Tensor,
     y_test: torch.Tensor,
-):
-    keys = list(dic.keys())
+    dic: dict
+) -> float:
+    preds = ovo_predict(dic, X_test, y_test.dtype)
+    correct = (preds == y_test).sum().item()
+    total   = y_test.numel()
+    acc     = correct / total
+    print(f"Accuracy: {correct}/{total} = {acc*100:.2f}%")
+    return acc
     
-    for key in keys:
-        distances = cal_distances(X = x_test, weights_and_bias = dic[key])
-        preds = torch.sign(distances).to(dtype = y_test.dtype)       # +1 or -1
-        votes = torch.where(preds == 1, key[0], key[1])
-        
-        print(y_test)
-        print(votes)
+
+
+# def ovo_test(dic: dict,
+#              X_test: torch.Tensor,
+#              y_test: torch.Tensor
+#             ) -> float:
+#     """
+#     Runs OvO prediction on X_test, compares to y_test, and prints accuracy.
+#     Returns:
+#       accuracy (float between 0 and 1)
+#     """
+#     preds = ovo_predict(dic, X_test)
+#     correct = (preds == y_test).sum().item()
+#     total   = y_test.numel()
+#     acc     = correct / total
+#     print(f"Accuracy: {correct}/{total} = {acc*100:.2f}%")
+#     return acc
