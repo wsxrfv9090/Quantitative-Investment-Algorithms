@@ -36,9 +36,9 @@ e.g: `d:\Important Files\Repositories\Quantitative-Investment-Algorithms'`
 - [x]      2. Pack functions better
 - [ ]      3. Design a batch option
 ##  5. OVO using pytorch algorithm, do one by one voting system, this uses the SVM function for each 2 clusters clustered by the k means cluster
-- [ ]    OVO classification (multiclass classification) implementation
-- [ ]      1. Add k means cluster output as datas labels
-- [ ]      2. Run SVC and do the classification
+- [x]    OVO classification (multiclass classification) implementation
+- [x]      1. Add k means cluster output as datas labels
+- [x]      2. Run SVC and do the classification
 - [ ]      3. Reallocate it's class by a voting system
 ## 6. (Optional) if the data is not linearly seperatable by svm, inplement kernel tricks using polynomial or other method to seperate it.
 ## 7. Choose class index as risk free rate then calculate alpha and beta for each stock within the class
