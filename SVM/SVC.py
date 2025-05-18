@@ -207,33 +207,6 @@ def get_norm_weights_bias(
     ) -> tuple[torch.Tensor, torch.Tensor]:
     return weights / weights.norm(), bias / weights.norm()
 
-
-# def adjust_lr(
-#     delta_loss,
-#     lr: torch.Tensor,
-#     decay_factor: float = 0.5,
-#     growth_factor: float = 1.05,
-#     min_lr: float = 1e-6,
-#     max_lr: float = 1.0,
-#     thresh: float = 1e-4,
-#     ) -> float:
-#     if delta_loss == None:
-#         # print(f"Start learning rate: {lr}")
-#         return lr
-    
-#     if delta_loss >= thresh:
-#         # good improvement → bump lr
-#         lr = lr * growth_factor
-#         lr = torch.clamp(lr, max = max_lr)
-        
-#     elif delta_loss <= -thresh:
-#         # loss got worse → cut lr
-#         lr = lr * decay_factor
-#         lr = torch.clamp(lr, min = min_lr)
-#     # else: tiny change → keep lr
-#     return lr
-
-
 def adjust_lr(
     *,
     lr: torch.Tensor,

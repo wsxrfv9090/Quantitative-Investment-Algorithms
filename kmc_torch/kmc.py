@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 
 # Important Parameters
 # The seed have to be a 32 bit interger value, because manual_seed only takes a 32 bit interger
-RANDOM_SEED = random.getrandbits(32)
+# RANDOM_SEED = random.getrandbits(32)
+RANDOM_SEED = int(2634854452)
 MAX_ITERATION = int(1e3)
 TOLERANCE = 1e-6
 N_RESTARTS = int(10)
@@ -109,6 +110,7 @@ def WCSS_for_single_k(
     max_iters: int = MAX_ITERATION,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]:
     global RANDOM_SEED
+    print(f"The seed starts at {RANDOM_SEED}")
     best_variation = float('inf')
     best_centroids = None
     best_labels = None

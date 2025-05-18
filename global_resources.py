@@ -18,6 +18,10 @@ global_paths = {
     'Output': os.path.join(default_dir, 'Output')
 }
 
+for name, path in global_paths.items():
+    os.makedirs(path, exist_ok = True)
+    # optionally, you can log it:
+    print(f"{name!r} directory is ready at: {path}")
 
 # has to be a interger with range: [0, 2**32)
 RANDOM_SEED = random.getrandbits(32)
@@ -35,7 +39,6 @@ def reinitiate_seed_torch() -> int:
     RANDOM_SEED = random.getrandbits(32)
     return RANDOM_SEED
 
-
 # Changes the directory to specified working directory, which is the repo directory you cloned.
 def ch_dir_to_repo(work_dir = default_dir):
     os.chdir(work_dir)
@@ -44,10 +47,9 @@ def ch_dir_to_repo(work_dir = default_dir):
         default_dir = work_dir
     return work_dir
 
-
 # Read files based on there sufixes.
 def read_and_return_pd_df(file_path):
-    print(f"Reading files from: {file_path}")
+    print(f"Reading files from: '{file_path}'")
 
     # Check if the file is csv or excel
     if file_path.endswith('.csv'):
