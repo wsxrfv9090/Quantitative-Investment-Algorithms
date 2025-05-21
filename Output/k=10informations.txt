@@ -1,3 +1,0 @@
-K Means Cluster Seed: 2634854452
-Average Variation: 39229.49227478027
-Current Variation: 37431.231330540744

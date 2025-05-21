@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 
 work_dir = gr.ch_dir_to_repo()
 
-# target_dir = os.path.join(work_dir, 'Data', 'Stock Data')
-target_dir = os.path.join(gr.global_paths['Data'], 'TEST Stock Data for CAPM', 'Stocks')
+target_dir = os.path.join(gr.global_paths['Data'], 'Stock Data')
+# target_dir = os.path.join(gr.global_paths['Data'], 'TEST Stock Data for CAPM', 'Stocks')
 
 default_market_index_path = os.path.join(gr.global_paths['Data'], 'market_index.csv') 
 default_index_df = gr.read_and_return_pd_df(default_market_index_path)
@@ -23,44 +23,95 @@ dfs = gr.get_df_dict(data_dir = target_dir)
 
 # Preprocess default index df
 
-
-def assign_labels_to_dfs(
-    labels: pd.DataFrame,
-    dfs: dict = dfs, 
-    ) -> dict:
-    label_map = labels.set_index('ID')['Labels'].to_dict()
-
-    dfs = {
-        key: (label_map[key], df)
-        for key, df in dfs.items()
-        if key in label_map
-    }
-    return dfs
-    
-def get_index_by_labels(
-    labels: pd.DataFrame,
-    dfs: dict = dfs, 
+def label_dfs(
+    df: pd.DataFrame,
+    label_column: str,
 ):
-    dfs = assign_labels_to_dfs(labels = labels, dfs = dfs)
-    grouped = {}
-    for key, (lbl, df) in dfs.items():
-        grouped.setdefault(lbl, {})[key] = df
+    label_dfs = {}
+    for lbl in sorted(df[label_column].unique().tolist()):
+        temp_df = df[df[label_column] == lbl].copy()
+        label_dfs[lbl] = temp_df
+    return label_dfs
+
+def create_nested_dfs(label_dfs, time_series_dfs, id_column='ID'):
+    """
+    Create a three-level nested dictionary structure:
+    - First level: label as key, dictionary as value
+    - Second level: stock ID as key, time series data as value
+    - Third level: the actual time series data for each stock
+    
+    Parameters:
+    -----------
+    label_dfs : dict
+        Dictionary with labels as keys and DataFrames containing stock IDs as values
+    time_series_dfs : dict
+        Dictionary with stock IDs as keys and time series DataFrames as values
+    id_column : str, default='ID'
+        Column name in label_dfs that contains the stock IDs
         
-    for lbl, subdict in grouped.items():
-        print("Label: ", lbl)
-        for key, df in subdict.items():
-            df = gr.change_head_to_ENG()
+    Returns:
+    --------
+    dict
+        Three-level nested dictionary structure
+    """
+    nested_dfs = {}
+    missing_ids = []
+    
+    # Iterate through each label and its corresponding DataFrame
+    for label, df in label_dfs.items():
+        if id_column not in df.columns:
+            print(f"Warning: '{id_column}' column not found in DataFrame for label {label}. Skipping.")
+            continue
+            
+        # Initialize the second level dictionary for this label
+        nested_dfs[label] = {}
+        
+        # Get list of stock IDs for this label
+        stock_ids = df[id_column].tolist()
+        
+        # Add time series data for each stock ID
+        for stock_id in stock_ids:
+            if stock_id in time_series_dfs:
+                nested_dfs[label][stock_id] = time_series_dfs[stock_id]
+            else:
+                missing_ids.append((label, stock_id))
+    
+    # Report missing IDs
+    if missing_ids:
+        print(f"Warning: {len(missing_ids)} stock IDs were not found in time_series_dfs:")
+        for label, stock_id in missing_ids[:10]:  # Show only first 10 to avoid clutter
+            print(f"  - Label: {label}, Stock ID: {stock_id}")
+        if len(missing_ids) > 10:
+            print(f"  - ... and {len(missing_ids) - 10} more")
+    
+    # Report stock IDs in time_series_dfs but not in any label_dfs
+    all_label_ids = set()
+    for df in label_dfs.values():
+        if id_column in df.columns:
+            all_label_ids.update(df[id_column].tolist())
+    
+    unused_ids = set(time_series_dfs.keys()) - all_label_ids
+    if unused_ids:
+        print(f"Note: {len(unused_ids)} stock IDs in time_series_dfs are not associated with any label")
+        if len(unused_ids) <= 10:
+            print(f"Unused IDs: {list(unused_ids)}")
+        else:
+            print(f"First 10 unused IDs: {list(unused_ids)[:10]}")
+    
+    return nested_dfs
+
 
 
 def CAPM(
-    index_df: pd.DataFrame = default_index_df, 
+    index_df: pd.DataFrame, 
     R_f: bool = True,
     processed_dfs_dict: dict = dfs, 
     ) -> pd.DataFrame:
     
     # Prepare index series
     
-    index_df = gr.drop_and_change_head()
+    cols = ['Date', 'Pct_Change']
+    index_df.columns = cols
         
     # Prepare risk-free rate
     if R_f:

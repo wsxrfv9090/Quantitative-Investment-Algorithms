@@ -7,7 +7,7 @@ import random
 
 
 # Set the working directory to a known absolute path
-default_dir = r'D:\ImportanFiles\Coding Related\Repositories\Quantitative-Investment-Algorithms'
+default_dir = r'D:\Important Files\Repositories\Quantitative-Investment-Algorithms'
 os.chdir(default_dir)
 
 global_paths = {
@@ -163,7 +163,7 @@ def get_df_dict(start_date = STARTDATE, end_date = ENDDATE, data_dir = None):
         temp_df['股票代码'] = temp_df['股票代码'].astype(str).str.zfill(6)
         key = temp_df.iat[1, 1]
         dfs[key] = temp_df
-    print(f"Reading complete, total skip count in {total_count}, skipped {skip_count} files. ")
+    print(f"Reading complete, total skip count: in {total_count} files, skipped {skip_count} files. ")
     return dfs
 
 def detach_to_pd(
